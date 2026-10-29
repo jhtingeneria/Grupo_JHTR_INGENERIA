@@ -14,10 +14,12 @@
   var estado = document.getElementById('jht-estado-reclamacion');
   var boton = formulario.querySelector('button[type="submit"]');
   var enviando = false;
+  var registroExitoso = false; // true tras confirmar el registro: bloquea reenvíos y mensajes posteriores
   var widgetId = null;
   var intentos = 0;
 
   function mostrar(mensaje) {
+    if (registroExitoso) return; // el mensaje de éxito no debe ser reemplazado
     if (estado) estado.textContent = mensaje;
   }
 
@@ -175,7 +177,7 @@
   }
 
   function habilitarBoton(habilitar) {
-    if (boton) boton.disabled = !habilitar || enviando;
+    if (boton) boton.disabled = registroExitoso || !habilitar || enviando;
   }
 
   function clavePublicaValida(valor) {
@@ -222,14 +224,17 @@
       widgetId = window.turnstile.render(contenedor, {
         sitekey: config.siteKey,
         callback: function () {
+          if (registroExitoso) return;
           if (!enviando) habilitarBoton(true);
           mostrar('Verificación completada. Ya puedes enviar el formulario.');
         },
         'expired-callback': function () {
+          if (registroExitoso) return;
           habilitarBoton(false);
           mostrar('La verificación caducó. Complétala nuevamente.');
         },
         'error-callback': function () {
+          if (registroExitoso) return;
           habilitarBoton(false);
           mostrar('No se pudo completar la verificación de seguridad. Actualiza la página e inténtalo nuevamente.');
         }
@@ -247,7 +252,7 @@
   formulario.addEventListener('submit', async function (evento) {
     evento.preventDefault();
 
-    if (enviando) return;
+    if (enviando || registroExitoso) return; // evita envíos simultáneos y duplicados tras un registro exitoso
     if (!formulario.checkValidity()) {
       formulario.reportValidity();
       return;
@@ -307,7 +312,16 @@
       }
 
       var c = resultado.constancia;
-      mostrar('¡Su reclamo ha sido registrado correctamente! GRUPO JHT INGENIERÍA SAC revisará su solicitud y emitirá una respuesta dentro del plazo legal aplicable. Guarde su código de registro y descargue su constancia en PDF.');
+      var mensajeConfirmacion = '¡Su reclamo ha sido registrado correctamente! GRUPO JHT INGENIERÍA SAC revisará su solicitud y emitirá una respuesta dentro del plazo legal aplicable. Guarde su código de registro y descargue su constancia en PDF.';
+
+      // Se marca el éxito ANTES de escribir el mensaje, para que nada pueda reemplazarlo después.
+      registroExitoso = true;
+      if (estado) {
+        estado.setAttribute('role', 'status');
+        estado.setAttribute('aria-live', 'polite');
+        estado.textContent = mensajeConfirmacion;
+      }
+
       mostrarConstancia(c);
       formulario.reset();
     } catch (error) {
@@ -315,11 +329,18 @@
       mostrar('No se pudo confirmar el registro. No reenvíes repetidamente; primero verifica el estado con JHT Ingeniería.');
     } finally {
       enviando = false;
-      if (boton) boton.textContent = 'Enviar reclamo';
-      // El botón seguirá deshabilitado hasta que Turnstile emita un token nuevo.
-      habilitarBoton(false);
-      if (window.turnstile && widgetId !== null) {
-        try { window.turnstile.reset(widgetId); } catch (_) {}
+      if (registroExitoso) {
+        // Registro confirmado: el botón queda bloqueado y no se reinicia Turnstile
+        // (el reinicio emitía un token nuevo, reactivaba el botón y pisaba el mensaje).
+        if (boton) boton.textContent = 'Reclamo registrado';
+        habilitarBoton(false);
+      } else {
+        if (boton) boton.textContent = 'Enviar reclamo';
+        // El botón seguirá deshabilitado hasta que Turnstile emita un token nuevo.
+        habilitarBoton(false);
+        if (window.turnstile && widgetId !== null) {
+          try { window.turnstile.reset(widgetId); } catch (_) {}
+        }
       }
     }
   });
