@@ -1,145 +1,368 @@
-<!DOCTYPE html>
-<!--
-  ARCHIVO: reclamaciones/index.html
-  Formulario público integrado con Cloudflare Turnstile y la API de JHT.
-  Antes de habilitarlo en producción, configurar la Site Key pública real,
-  verificar la API desplegada y revisar los requisitos legales aplicables.
--->
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#12161a">
-  <title>Libro de Reclamaciones — JHT Ingeniería</title>
-  <meta name="description" content="Libro de reclamaciones de JHT Ingeniería.">
-  <link rel="icon" type="image/png" href="../assets/img/logo-jht-oficial.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/styles.css">
-  <link rel="stylesheet" href="../assets/css/jht-modern.css">
-</head>
-<body>
+/*
+ * GRUPO JHT INGENIERÍA SAC — integración pública de reclamaciones.
+ * Solo usa la Site Key pública en el navegador. La Secret Key nunca va aquí.
+ * Si falta configuración, el formulario queda bloqueado (fail-closed); no usa Formspree.
+ */
+(function () {
+  'use strict';
 
-  <div data-include="../components/header.html"></div>
+  var formulario = document.getElementById('form-reclamacion');
+  if (!formulario) return;
 
-  <main>
-    <header class="page-header">
-      <div class="container">
-        <p class="kicker page-header__kicker">Atención al cliente</p>
-        <h1>Libro de Reclamaciones</h1>
-        <p>Utiliza este formulario para enviar una queja o reclamo a nuestro equipo de atención.</p>
-      </div>
-    </header>
+  var config = window.JHT_RECLAMACIONES || {};
+  var contenedor = document.getElementById('jht-turnstile');
+  var estado = document.getElementById('jht-estado-reclamacion');
+  var boton = formulario.querySelector('button[type="submit"]');
+  var enviando = false;
+  var registroExitoso = false; // true tras confirmar el registro: bloquea reenvíos y mensajes posteriores
+  var widgetId = null;
+  var intentos = 0;
 
-    <section class="section">
-      <div class="container" style="max-width: 820px;">
+  function mostrar(mensaje) {
+    if (registroExitoso) return; // el mensaje de éxito no debe ser reemplazado
+    if (estado) estado.textContent = mensaje;
+  }
 
-        <form class="form-grid mt-lg" id="form-reclamacion" method="post" novalidate>
-          <!-- Campo señuelo anti-spam; el Worker también debe validar todas las solicitudes. -->
-          <div class="form-field" style="position:absolute; left:-9999px;" aria-hidden="true">
-            <label for="rec-sitio-web">No completar este campo</label>
-            <input type="text" id="rec-sitio-web" name="sitio_web" tabindex="-1" autocomplete="off">
-          </div>
+  // ==PDF-INICIO==
+  // Generador de PDF mínimo, sin librerías ni costo. Solo texto, Helvetica, varias páginas.
+  function pdfTexto(valor) {
+    var s = String(valor == null ? '' : valor)
+      .replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2013\u2014]/g, '-').replace(/\u2026/g, '...').replace(/\r/g, '');
+    var o = '';
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      if (c === 10) o += '\n';
+      else if (c < 32 || (c >= 127 && c <= 159) || c > 255) o += (c === 9 ? ' ' : '?');
+      else o += s.charAt(i);
+    }
+    return o;
+  }
 
-          <div class="form-row-2">
-            <div class="form-field">
-              <label for="rec-tipo">Tipo de documento *</label>
-              <select id="rec-tipo" name="tipo_reclamo" required>
-                <option value="" disabled selected>Selecciona una opción</option>
-                <option>Reclamo</option>
-                <option>Queja</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="rec-fecha">Fecha</label>
-              <input type="date" id="rec-fecha" name="fecha">
-            </div>
-          </div>
+  function pdfEscapar(s) {
+    return s.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
+  }
 
-          <h3 class="mt-lg mb-0">Datos del consumidor</h3>
-          <div class="form-row-2">
-            <div class="form-field">
-              <label for="rec-nombre">Nombres y apellidos *</label>
-              <input type="text" id="rec-nombre" name="nombre" placeholder="Nombre completo" required>
-            </div>
-            <div class="form-field">
-              <label for="rec-doc">N.º de documento *</label>
-              <input type="text" id="rec-doc" name="documento" placeholder="DNI / CE / RUC" required>
-            </div>
-          </div>
-          <div class="form-field">
-            <label for="rec-domicilio">Domicilio *</label>
-            <input type="text" id="rec-domicilio" name="domicilio" placeholder="Dirección, distrito, ciudad" required maxlength="250">
-          </div>
-          <div class="form-row-2">
-            <div class="form-field">
-              <label for="rec-email">Correo electrónico *</label>
-              <input type="email" id="rec-email" name="email" placeholder="correo@ejemplo.com" required>
-            </div>
-            <div class="form-field">
-              <label for="rec-telefono">Teléfono</label>
-              <input type="tel" id="rec-telefono" name="telefono" placeholder="+51 ___ ___ ___">
-            </div>
-          </div>
+  function pdfEnvolver(texto, max) {
+    var lineas = [];
+    pdfTexto(texto).split('\n').forEach(function (parrafo) {
+      var linea = '';
+      parrafo.split(' ').forEach(function (palabra) {
+        while (palabra.length > max) {
+          if (linea) { lineas.push(linea); linea = ''; }
+          lineas.push(palabra.slice(0, max));
+          palabra = palabra.slice(max);
+        }
+        if (linea && (linea + ' ' + palabra).length > max) { lineas.push(linea); linea = palabra; }
+        else linea = linea ? linea + ' ' + palabra : palabra;
+      });
+      lineas.push(linea);
+    });
+    return lineas;
+  }
 
-          <h3 class="mt-lg mb-0">Detalle del reclamo</h3>
-          <div class="form-field">
-            <label for="rec-servicio">Servicio relacionado</label>
-            <select id="rec-servicio" name="servicio">
-              <option>Estructuras metálicas</option>
-              <option>Corte láser</option>
-              <option>Soldadura especializada</option>
-              <option>Servicios de maquinado y maestranza</option>
-              <option>Mantenimiento industrial</option>
-              <option>Bombas y válvulas</option>
-              <option>Otro</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label for="rec-monto">Monto reclamado (opcional)</label>
-            <input type="text" id="rec-monto" name="monto_reclamado" placeholder="Ej.: S/ 1,500.00" maxlength="40">
-          </div>
-          <div class="form-field">
-            <label for="rec-detalle">Descripción del reclamo o queja *</label>
-            <textarea id="rec-detalle" name="detalle" rows="5" placeholder="Describe lo sucedido con el mayor detalle posible" required></textarea>
-          </div>
-          <div class="form-field">
-            <label for="rec-pedido">Pedido del consumidor *</label>
-            <textarea id="rec-pedido" name="pedido" rows="3" placeholder="¿Qué solución esperas?" required></textarea>
-          </div>
+  // bloques: [{ t: 'texto', n: tamaño, b: negrita(bool), s: espacio previo }]
+  function pdfConstruir(bloques) {
+    var MARGEN = 50, ALTO = 842, LIMITE_INFERIOR = 60;
+    var paginas = [[]], y = ALTO - MARGEN;
+    bloques.forEach(function (bl) {
+      var max = Math.floor(495 / (bl.n * 0.55));
+      var interlineado = Math.round(bl.n * 1.4);
+      y -= (bl.s || 0);
+      pdfEnvolver(bl.t, max).forEach(function (linea) {
+        if (y < LIMITE_INFERIOR) { paginas.push([]); y = ALTO - MARGEN; }
+        paginas[paginas.length - 1].push('BT /' + (bl.b ? 'F2' : 'F1') + ' ' + bl.n + ' Tf 1 0 0 1 ' + MARGEN + ' ' + y + ' Tm (' + pdfEscapar(linea) + ') Tj ET');
+        y -= interlineado;
+      });
+    });
 
-          <p style="font-size:.9rem;">Usaremos tus datos únicamente para atender este reclamo. Más información en nuestra <a href="../privacidad/">política de privacidad</a>.</p>
+    var out = '%PDF-1.4\n', offsets = [];
+    function agregar(n, cuerpo) { offsets[n] = out.length; out += n + ' 0 obj\n' + cuerpo + '\nendobj\n'; }
+    var kids = paginas.map(function (_, i) { return (5 + 2 * i) + ' 0 R'; }).join(' ');
+    agregar(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    agregar(2, '<< /Type /Pages /Kids [' + kids + '] /Count ' + paginas.length + ' >>');
+    agregar(3, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+    agregar(4, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+    paginas.forEach(function (ops, i) {
+      var flujo = ops.join('\n');
+      agregar(5 + 2 * i, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ' + (6 + 2 * i) + ' 0 R >>');
+      agregar(6 + 2 * i, '<< /Length ' + flujo.length + ' >>\nstream\n' + flujo + '\nendstream');
+    });
+    var total = 4 + 2 * paginas.length, xref = out.length;
+    out += 'xref\n0 ' + (total + 1) + '\n0000000000 65535 f \n';
+    for (var n = 1; n <= total; n++) out += ('0000000000' + offsets[n]).slice(-10) + ' 00000 n \n';
+    out += 'trailer\n<< /Size ' + (total + 1) + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF';
 
-          <!-- Turnstile se mostrará al configurar la Site Key pública. -->
-          <div id="jht-turnstile" aria-label="Verificación de seguridad"></div>
-          <p id="jht-estado-reclamacion" role="status" aria-live="polite"></p>
-          <button type="submit" class="btn btn--primary btn--block" disabled>
-            Enviar reclamo
-          </button>
+    var bytes = new Uint8Array(out.length);
+    for (var k = 0; k < out.length; k++) bytes[k] = out.charCodeAt(k) & 255;
+    return bytes;
+  }
 
-          <div id="jht-constancia" role="status" aria-live="polite" hidden
-               style="border:1px solid rgba(255,255,255,.3); border-radius:8px; padding:1rem 1.25rem; margin-top:1rem;"></div>
-        </form>
-      </div>
-    </section>
-  </main>
+  function pdfConstancia(c, fecha) {
+    var bloques = [
+      { t: 'GRUPO JHT INGENIERIA SAC', n: 16, b: true },
+      { t: 'Libro de Reclamaciones - Constancia de recepcion', n: 12, b: true, s: 4 },
+      { t: 'N° de reclamo: ' + (c.codigo || '-'), n: 14, b: true, s: 14 },
+      { t: 'Fecha y hora de registro: ' + (fecha || '-'), n: 11, s: 6 }
+    ];
+    [
+      ['Tipo', c.tipo_reclamo], ['Nombres y apellidos', c.nombre], ['Documento', c.documento],
+      ['Domicilio', c.domicilio], ['Correo electronico', c.email], ['Telefono', c.telefono],
+      ['Servicio relacionado', c.servicio], ['Monto reclamado', c.monto_reclamado],
+      ['Detalle del reclamo o queja', c.detalle], ['Pedido del consumidor', c.pedido]
+    ].forEach(function (f) {
+      bloques.push({ t: f[0], n: 11, b: true, s: 10 });
+      bloques.push({ t: f[1] || '-', n: 11 });
+    });
+    bloques.push({ t: 'Esta constancia acredita la recepcion del registro. Conserve el codigo para cualquier consulta.', n: 9, s: 18 });
+    return pdfConstruir(bloques);
+  }
+  // ==PDF-FIN==
 
-  <div data-include="../components/footer.html"></div>
-  <div data-include="../components/whatsapp-button.html"></div>
+  // Muestra la fecha/hora en la zona horaria del dispositivo de quien envía el reclamo.
+  // El servidor entrega la fecha en UTC (sin indicador de zona), por eso se interpreta como UTC
+  // y se convierte a la hora local del usuario. Incluye el nombre de la zona (ej. GMT-5).
+  function formatearFechaLocal(valor) {
+    if (!valor) return '';
+    var texto = String(valor).trim();
+    var iso = texto.replace(' ', 'T');
+    if (!/(Z|[+-]\d{2}:?\d{2})$/i.test(iso)) iso += 'Z';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return texto;
+    try {
+      return d.toLocaleString('es-PE', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hourCycle: 'h23', timeZoneName: 'short'
+      });
+    } catch (_) {
+      return texto;
+    }
+  }
 
-  <script src="../assets/js/includes.js"></script>
-  <script src="../assets/js/menu.js"></script>
-  <script>
-    // Solo esta clave pública debe añadirse aquí. No insertar secretos.
-    window.JHT_RECLAMACIONES = {
-      api: 'https://jht-reclamaciones-api.jhtingeneria.workers.dev',
-      siteKey: '0x4AAAAAAFpTL9JzbP_qFiIQ' // Obtener la Site Key de producción en Cloudflare Turnstile; nunca poner aquí la Secret Key.
+  function descargarConstancia(c, fecha) {
+    var bytes = pdfConstancia(c, fecha);
+    var blob = new Blob([bytes], { type: 'application/pdf' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'Constancia-' + String(c.codigo || 'reclamo').replace(/[^A-Za-z0-9_-]/g, '') + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+  }
+
+  // Constancia visible en pantalla + descarga automática del PDF (con botón de respaldo).
+  function mostrarConstancia(c) {
+    var caja = document.getElementById('jht-constancia');
+    if (!caja) return;
+    var fecha = formatearFechaLocal(c.fecha_registro_lima || c.fecha_registro || '');
+    caja.textContent = '';
+
+    var titulo = document.createElement('h3');
+    titulo.textContent = 'Constancia de recepción';
+    caja.appendChild(titulo);
+
+    [
+      ['N° de reclamo', c.codigo],
+      ['Tipo', c.tipo_reclamo],
+      ['Fecha y hora de registro', fecha],
+      ['Consumidor', c.nombre],
+      ['Correo de contacto', c.email]
+    ].forEach(function (par) {
+      var p = document.createElement('p');
+      var b = document.createElement('strong');
+      b.textContent = par[0] + ': ';
+      p.appendChild(b);
+      p.appendChild(document.createTextNode(par[1] || '-'));
+      caja.appendChild(p);
+    });
+
+    var aviso = document.createElement('p');
+    aviso.textContent = 'Guarde este código. Se descargó una constancia en PDF; si no se descargó, use el botón.';
+    caja.appendChild(aviso);
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn--secondary btn--sm';
+    btn.textContent = 'Descargar constancia (PDF)';
+    btn.addEventListener('click', function () { descargarConstancia(c, fecha); });
+    caja.appendChild(btn);
+
+    caja.hidden = false;
+    caja.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    try { descargarConstancia(c, fecha); }
+    catch (e) { console.error('[reclamaciones-d1] No se pudo generar el PDF automáticamente.'); }
+  }
+
+  function habilitarBoton(habilitar) {
+    if (boton) boton.disabled = registroExitoso || !habilitar || enviando;
+  }
+
+  function clavePublicaValida(valor) {
+    return typeof valor === 'string' &&
+      valor.trim() !== '' &&
+      !valor.startsWith('REEMPLAZAR_') &&
+      !valor.startsWith('1x00000000000000000000AA');
+  }
+
+  function apiValida(valor) {
+    if (typeof valor !== 'string' || !valor.trim()) return false;
+    try {
+      var url = new URL(valor);
+      return url.protocol === 'https:' ||
+        (url.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(url.hostname));
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // No habilitar el formulario hasta configurar una Site Key real y la API.
+  if (!clavePublicaValida(config.siteKey) || !apiValida(config.api) || !contenedor) {
+    habilitarBoton(false);
+    mostrar('El formulario está temporalmente deshabilitado mientras se completa la configuración segura. No se ha enviado ningún registro.');
+    formulario.addEventListener('submit', function (evento) {
+      evento.preventDefault();
+      mostrar('El formulario no está habilitado. No se ha enviado ningún registro.');
+    });
+    return;
+  }
+
+  function iniciarTurnstile() {
+    if (!window.turnstile || typeof window.turnstile.render !== 'function') {
+      if (++intentos < 80) {
+        window.setTimeout(iniciarTurnstile, 250);
+      } else {
+        habilitarBoton(false);
+        mostrar('No se pudo cargar la verificación de seguridad. Actualiza la página e inténtalo más tarde.');
+      }
+      return;
+    }
+
+    try {
+      widgetId = window.turnstile.render(contenedor, {
+        sitekey: config.siteKey,
+        callback: function () {
+          if (registroExitoso) return;
+          if (!enviando) habilitarBoton(true);
+          mostrar('Verificación completada. Ya puedes enviar el formulario.');
+        },
+        'expired-callback': function () {
+          if (registroExitoso) return;
+          habilitarBoton(false);
+          mostrar('La verificación caducó. Complétala nuevamente.');
+        },
+        'error-callback': function () {
+          if (registroExitoso) return;
+          habilitarBoton(false);
+          mostrar('No se pudo completar la verificación de seguridad. Actualiza la página e inténtalo nuevamente.');
+        }
+      });
+    } catch (error) {
+      console.error('[reclamaciones-d1] No se pudo inicializar Turnstile.');
+      habilitarBoton(false);
+      mostrar('No se pudo iniciar la verificación de seguridad. El formulario permanece deshabilitado.');
+    }
+  }
+
+  habilitarBoton(false);
+  iniciarTurnstile();
+
+  formulario.addEventListener('submit', async function (evento) {
+    evento.preventDefault();
+
+    if (enviando || registroExitoso) return; // evita envíos simultáneos y duplicados tras un registro exitoso
+    if (!formulario.checkValidity()) {
+      formulario.reportValidity();
+      return;
+    }
+
+    var campoSenal = formulario.elements.sitio_web;
+    if (campoSenal && campoSenal.value.trim()) {
+      mostrar('No se pudo procesar la solicitud.');
+      return;
+    }
+
+    if (widgetId === null || !window.turnstile) {
+      habilitarBoton(false);
+      mostrar('La verificación de seguridad aún no está lista.');
+      return;
+    }
+
+    var token = window.turnstile.getResponse(widgetId);
+    if (!token) {
+      habilitarBoton(false);
+      mostrar('Completa la verificación de seguridad antes de enviar.');
+      return;
+    }
+
+    var campos = new FormData(formulario);
+    var datos = {
+      tipo_reclamo: String(campos.get('tipo_reclamo') || ''),
+      nombre: String(campos.get('nombre') || ''),
+      documento: String(campos.get('documento') || ''),
+      domicilio: String(campos.get('domicilio') || ''),
+      email: String(campos.get('email') || ''),
+      telefono: String(campos.get('telefono') || ''),
+      servicio: String(campos.get('servicio') || ''),
+      monto_reclamado: String(campos.get('monto_reclamado') || ''),
+      detalle: String(campos.get('detalle') || ''),
+      pedido: String(campos.get('pedido') || ''),
+      turnstileToken: token
     };
-  </script>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-  <script src="../assets/js/reclamaciones-d1.js" defer></script>
-  <script src="../assets/js/animations.js"></script>
-  <script src="../assets/js/whatsapp.js"></script>
-</body>
-</html>
+
+    enviando = true;
+    habilitarBoton(false);
+    if (boton) boton.textContent = 'Registrando...';
+    mostrar('Registrando tu solicitud de forma segura...');
+
+    try {
+      var respuesta = await fetch(config.api.replace(/\/+$/, '') + '/reclamaciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+        cache: 'no-store',
+        credentials: 'omit'
+      });
+
+      var resultado = await respuesta.json().catch(function () { return {}; });
+      if (!respuesta.ok || !resultado.constancia || !resultado.constancia.codigo) {
+        throw new Error(resultado.error || 'No se recibió confirmación del registro.');
+      }
+
+      var c = resultado.constancia;
+      var mensajeConfirmacion = '¡Su reclamo ha sido registrado correctamente! GRUPO JHT INGENIERÍA SAC revisará su solicitud y emitirá una respuesta dentro del plazo legal aplicable. Guarde su código de registro y descargue su constancia en PDF.';
+
+      // Se marca el éxito ANTES de escribir el mensaje, para que nada pueda reemplazarlo después.
+      registroExitoso = true;
+      if (estado) {
+        estado.setAttribute('role', 'status');
+        estado.setAttribute('aria-live', 'polite');
+        estado.textContent = mensajeConfirmacion;
+      }
+
+      mostrarConstancia(c);
+      formulario.reset();
+    } catch (error) {
+      console.error('[reclamaciones-d1] No se pudo confirmar el registro:', error.message);
+      mostrar('No se pudo confirmar el registro. No reenvíes repetidamente; primero verifica el estado con JHT Ingeniería.');
+    } finally {
+      enviando = false;
+      if (registroExitoso) {
+        // Registro confirmado: el botón queda bloqueado y no se reinicia Turnstile
+        // (el reinicio emitía un token nuevo, reactivaba el botón y pisaba el mensaje).
+        if (boton) boton.textContent = 'Reclamo registrado';
+        habilitarBoton(false);
+      } else {
+        if (boton) boton.textContent = 'Enviar reclamo';
+        // El botón seguirá deshabilitado hasta que Turnstile emita un token nuevo.
+        habilitarBoton(false);
+        if (window.turnstile && widgetId !== null) {
+          try { window.turnstile.reset(widgetId); } catch (_) {}
+        }
+      }
+    }
+  });
+})();
