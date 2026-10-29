@@ -8,7 +8,7 @@ const MAX_PAGES = 20; // 20 x 100 archivos por solicitud; ajustar si la galería
 export default {
   async fetch(request, env, ctx) {
     const origin = env.ALLOWED_ORIGIN || 'https://jhtingeneria.github.io';
-    const cors = { 'Access-Control-Allow-Origin': origin, 'Vary': 'Origin', 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=120' };
+    const cors = { 'Access-Control-Allow-Origin': origin, 'Vary': 'Origin', 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=600' };
     const url = new URL(request.url);
     if (url.pathname !== '/proyectos') return new Response(JSON.stringify({error:'No encontrado'}), {status:404,headers:cors});
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { ...cors, 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
