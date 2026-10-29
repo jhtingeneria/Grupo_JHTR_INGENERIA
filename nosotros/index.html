@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<!--
+  ARCHIVO: nosotros/index.html
+  QUÉ HACE: Página "Nosotros": storytelling breve de la empresa, cifras
+  clave con contadores animados al hacer scroll (data-counter, ver
+  assets/js/animations.js) y certificaciones (ISO/IEC 17025, ISO 45001,
+  ASME/API).
+  CÓMO SE RELACIONA: comparte header/footer/whatsapp con el resto del
+  sitio vía components/*.html + assets/js/includes.js.
+-->
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#12161a" name="theme-color"/>
+<title>Nosotros — JHT Ingeniería</title>
+<meta content="Conoce a JHT Ingeniería: nuestra historia, cifras clave y certificaciones en calidad, seguridad y normas industriales." name="description"/>
+<link href="../assets/img/logo-jht-oficial.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="../assets/css/styles.css" rel="stylesheet"/>
+<link href="../assets/css/jht-modern.css" rel="stylesheet"/>
+</head>
+<body>
+<div data-include="../components/header.html"></div>
+<main>
+<header class="page-header">
+<div class="container">
+<p class="kicker page-header__kicker">Quiénes somos</p>
+<h1>Nosotros</h1>
+<p>Más de 5 años fabricando y montando estructuras metálicas, y brindando mantenimiento industrial, para clientes que no pueden darse el lujo de fallar.</p>
+</div>
+</header>
+<!-- HISTORIA / STORYTELLING -->
+<section class="section">
+<div class="container">
+<div class="grid grid--2">
+<div data-reveal="left">
+<p class="kicker">Nuestra historia</p>
+<h2>De un taller pequeño a socio de ingeniería industrial</h2>
+<p>JHT Ingeniería nació como un taller de fabricación metalmecánica al servicio de la industria peruana. Con el paso de los años, sumamos capacidad de ingeniería propia, procesos certificados y equipos especializados, hasta convertirnos en un socio integral para minería, energía, construcción e industria.</p>
+<p>Hoy diseñamos, fabricamos, montamos y damos mantenimiento a estructuras y equipos que operan en condiciones exigentes, con la misma exigencia de calidad y seguridad con la que empezamos.</p>
+</div>
+
+</div>
+</div>
+</section>
+<!-- PROPÓSITO (bloque propio, aparte de Misión/Visión) -->
+<section class="section section--offwhite">
+<div class="container" style="max-width: 760px;">
+<div class="section-head section-head--center" data-reveal="">
+<p class="kicker">Nuestro propósito</p>
+<h2>Por qué hacemos lo que hacemos</h2>
+</div>
+<p class="text-center" data-reveal="">Existimos para que la industria peruana construya y opere con estructuras y equipos en los que pueda confiar, sin comprometer la seguridad de las personas ni los plazos de sus proyectos.</p>
+</div>
+</section>
+<!-- CIFRAS CLAVE (contadores animados) -->
+<section class="section section--dark">
+<div class="container">
+<div class="section-head section-head--center" data-reveal="">
+<p class="kicker">En cifras</p>
+<h2>Resultados que respaldan nuestro trabajo</h2>
+</div>
+<div class="counters" data-reveal-group="">
+<div class="counter" data-reveal="">
+<span class="counter__value"><span data-counter="5" data-counter-suffix="+">0</span></span>
+<span class="counter__label">Años de experiencia</span>
+</div>
+<div class="counter" data-reveal="">
+<span class="counter__value"><span data-counter="25" data-counter-suffix="+">0</span></span>
+<span class="counter__label">Proyectos completados</span>
+</div>
+<div class="counter" data-reveal="">
+<span class="counter__value"><span data-counter="20" data-counter-suffix="+">0</span></span>
+<span class="counter__label">Clientes satisfechos</span>
+</div>
+<div class="counter" data-reveal="">
+<span class="counter__value"><span data-counter="99" data-counter-suffix="%">0</span></span>
+<span class="counter__label">Proyectos entregados a tiempo</span>
+</div>
+</div>
+</div>
+</section>
+<!-- NUESTRA PLANTA (ficha técnica: m², ubicación, tecnología instalada) -->
+<section class="section section--offwhite">
+<div class="container">
+<div class="section-head" data-reveal="">
+<p class="kicker">Instalaciones</p>
+<h2>Nuestra planta</h2>
+<p>Conoce nuestras soluciones en fabricación y mantenimiento industrial. Para información sobre capacidades e instalaciones, comunícate con nuestro equipo.</p>
+</div>
+</div></section>
+<!-- NUESTRO EQUIPO -->
+<section class="section">
+<div class="container">
+<div class="grid grid--2">
+
+<div data-reveal="right">
+<p class="kicker">Nuestra gente</p>
+<h2>Nuestro equipo</h2>
+<p>Un equipo de ingenieros, soldadores calificados y técnicos especializados que combina experiencia de campo con procesos de calidad documentados, para responder con la misma exigencia en taller y en obra.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CERTIFICACIONES -->
+<section class="section section--offwhite">
+<div class="container">
+<div class="section-head" data-reveal="">
+<p class="kicker">Respaldo técnico</p>
+<h2>Certificaciones y normas</h2>
+<p>Trabajamos alineados a estándares internacionales de calidad, seguridad y buenas prácticas de ingeniería.</p>
+</div>
+<div class="cert-row" data-reveal-group="">
+<span class="cert-badge" data-reveal=""><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 2 L21 6 V12 C21 17 17 21 12 22 C7 21 3 17 3 12 V6 Z"></path></svg> ISO/IEC 17025</span>
+<span class="cert-badge" data-reveal=""><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 2 L21 6 V12 C21 17 17 21 12 22 C7 21 3 17 3 12 V6 Z"></path></svg> ISO 45001</span>
+<span class="cert-badge" data-reveal=""><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M8 12 L11 15 L16 9"></path></svg> Normas ASME</span>
+<span class="cert-badge" data-reveal=""><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M8 12 L11 15 L16 9"></path></svg> Normas API</span>
+</div>
+<p class="badge-note mt-lg">Certificaciones vigentes sujetas a verificación — se actualizará con la documentación oficial provista por la empresa.</p>
+<!-- Enlace de descarga del brochure: también se agregó como acceso
+             secundario en el footer de TODAS las páginas (ver
+             components/footer.html), no solo aquí. -->
+<p class="mt-lg"><a class="btn btn--secondary" href="../assets/docs/brochure-corporativo-jht.pdf" rel="noopener" target="_blank">Descargar Brochure Corporativo (PDF)</a></p>
+</div>
+</section>
+<section class="section section--tight">
+<div class="container">
+<div class="cta-banner" data-reveal="scale">
+<div>
+<h2>Hablemos de tu próximo proyecto</h2>
+<p>Nuestro equipo de ingeniería está listo para evaluarlo contigo.</p>
+</div>
+<a class="btn btn--secondary" href="../contacto/">Contáctanos</a>
+</div>
+</div>
+</section>
+</main>
+<div data-include="../components/footer.html"></div>
+<div data-include="../components/whatsapp-button.html"></div>
+<script src="../assets/js/includes.js"></script>
+<script src="../assets/js/menu.js"></script>
+<script src="../assets/js/animations.js"></script>
+<script src="../assets/js/whatsapp.js"></script>
+</body>
+</html>

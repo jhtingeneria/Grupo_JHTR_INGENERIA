@@ -1,0 +1,50 @@
+<!--
+  ARCHIVO: components/header.html
+  QUÉ HACE: Fragmento reutilizable del encabezado del sitio (logo, menú
+  principal, botón "Solicitar Cotización"). Se inyecta en cada página
+  dentro de <div data-include="components/header.html"> mediante
+  assets/js/includes.js, y su comportamiento (menú móvil, header que se
+  oculta al hacer scroll) lo controla assets/js/menu.js.
+  DÓNDE SE COLOCA: justo después de <body> en cada página.
+  RUTAS: este archivo se escribe en forma "canónica", es decir, como si se
+  incluyera desde la raíz del sitio (href="nosotros/", src="assets/...",
+  etc., sin "../"). La página que lo incluye la mayoría de las veces está
+  UN nivel más abajo (nosotros/, servicios/, contacto/, etc.), así que
+  assets/js/includes.js corrige automáticamente estos enlaces con el
+  prefijo "../" que corresponda, tomando como referencia la propia
+  profundidad con la que la página pidió este fragmento (el valor de su
+  atributo data-include, ej. "../components/header.html"). Así el mismo
+  archivo fuente sirve para index.html (profundidad 0) y para
+  nosotros/index.html o servicios/maquinado-maestranza.html (profundidad 1) sin
+  mantener copias duplicadas. Ver el detalle en assets/js/includes.js.
+  LOGOTIPO VERIFICADO: archivo original proporcionado por JHT.
+-->
+<header class="site-header">
+  <div class="container">
+    <a href="" class="brand">
+      <img src="assets/img/logo-jht-oficial.png" alt="JHT Ingeniería" width="48" height="48">
+      JHT Ingeniería
+    </a>
+
+    <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
+      <ul class="main-nav__list">
+        <li><a href="">Inicio</a></li>
+        <li><a href="nosotros/">Nosotros</a></li>
+        <li><a href="servicios/">Servicios</a></li>
+        <li><a href="proyectos/">Proyectos</a></li>
+        <li><a href="clientes/">Clientes</a></li>
+        <li><a href="valor/">Valor</a></li>
+        <li><a href="faqs/">FAQs</a></li>
+        <li><a href="contacto/">Contacto</a></li>
+        <li>
+          <div data-include="components/cotizacion-boton.html"></div>
+        </li>
+      </ul>
+    </nav>
+
+    <button type="button" class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="main-nav__backdrop"></div>
+</header>

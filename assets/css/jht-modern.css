@@ -1,0 +1,131 @@
+/* JHT Diseño profesional — Fase 1. Identidad original + composición industrial contemporánea. */
+:root {
+  --color-graphite-950:#101d2b;
+  --color-graphite-900:#192838;
+  --color-graphite-800:#263849;
+  --color-graphite-700:#405162;
+  --color-blue-900:#062e5b;
+  --color-blue-700:#0c477e;
+  --color-blue-500:#3174a9;
+  --color-blue-100:#e4eef6;
+  --color-orange-700:#c58a00;
+  --color-orange-600:#f4b400;
+  --color-orange-500:#ffca32;
+  --color-orange-100:#fff3cd;
+  --color-yellow-400:#ffbd12;
+  --color-offwhite:#f5f8fb;
+  --color-gray-200:#dfe7ed;
+  --radius-md:14px;
+}
+body {background:#fff;}
+.site-header::before {background:rgba(4,29,57,.92);border-bottom:1px solid rgba(255,255,255,.12);}
+.site-header.is-scrolled::before {background:rgba(4,29,57,.98);}
+.brand {font-size:1.08rem;letter-spacing:.025em;font-weight:700;}
+.brand img {height:48px;width:48px;object-fit:contain;border-radius:50%;background:white;}
+.hero {min-height:min(850px,100svh);background:linear-gradient(125deg,#082d57,#0a1b2d);}
+.hero__media::after {z-index:3;background:linear-gradient(90deg,rgba(3,25,52,.96) 0%,rgba(4,35,69,.84) 40%,rgba(4,31,57,.25) 100%),linear-gradient(0deg,rgba(3,25,52,.65),transparent 55%);}
+.hero__content {z-index:4;padding-block:clamp(10rem,17vw,14rem) 5rem;}
+.hero__title {max-width:13ch;line-height:1.04;letter-spacing:-.018em;text-wrap:balance;}
+.hero__title em {color:#ffbf16;}
+.hero__eyebrow {color:#ffd058;letter-spacing:.14em;}
+.hero__lead {line-height:1.7;color:#ecf3fa;}
+.btn--primary {background:#ffbf16;color:#092b50;border-color:#ffbf16;font-weight:700;box-shadow:0 12px 32px rgba(255,191,22,.16);}
+.btn--primary:hover {background:#ffcf49;border-color:#ffcf49;color:#092b50;transform:translateY(-2px);}
+.btn--secondary {border-color:rgba(255,255,255,.65);}
+.kicker,.page-header__kicker {color:#bf8300;}
+.section-head h2 {color:#082e59;letter-spacing:-.015em;}
+.section--dark {background:#082e59;}
+.service-card {border-radius:14px;overflow:hidden;background:#092d53;box-shadow:0 18px 45px rgba(7,37,68,.13);transition:transform .35s ease,box-shadow .35s ease;}
+.service-card:hover {transform:translateY(-6px);box-shadow:0 24px 55px rgba(7,37,68,.22);}
+.page-header {background:linear-gradient(115deg,#07325e,#142b42 75%);}
+:focus-visible {outline:3px solid #ffbf16;outline-offset:3px;}
+@media (max-width:767px) {
+ .hero {min-height:740px;}
+ .hero__media::after {background:linear-gradient(0deg,rgba(3,25,52,.96),rgba(3,25,52,.55));}
+ .hero__content {padding-block:10rem 4rem;}
+ .hero__title {font-size:clamp(2.6rem,10vw,4rem);}
+ .brand img {height:42px;width:42px;}
+}
+@media (prefers-reduced-motion:reduce) {.service-card,.btn--primary {transition:none;}.service-card:hover,.btn--primary:hover {transform:none;}}
+
+/* Fase 2: fotografía conceptual estática, sin dependencia de video de portada. */
+.hero__media img {object-position:center 53%;}
+.hero__media::after {background:linear-gradient(90deg,rgba(3,24,47,.95) 0%,rgba(3,24,47,.82) 28%,rgba(3,24,47,.30) 62%,rgba(3,24,47,.08) 100%),linear-gradient(0deg,rgba(3,24,47,.55),transparent 55%);}
+.hero__title {max-width:14ch;}
+@media (max-width:767px) {.hero__media img {object-position:65% center;} .hero__media::after {background:linear-gradient(0deg,rgba(3,24,47,.94) 0%,rgba(3,24,47,.74) 55%,rgba(3,24,47,.40) 100%);}}
+
+/* Fase 3 — Identidad visual única y tipografía fluida para todas las pantallas */
+:root {
+ --fs-display:clamp(2.45rem, 4.6vw + .65rem, 5.2rem);
+ --fs-h1:clamp(2.05rem, 2.7vw + .85rem, 3.5rem);
+ --fs-h2:clamp(1.7rem, 1.75vw + .8rem, 2.65rem);
+ --fs-h3:clamp(1.22rem, .9vw + .8rem, 1.65rem);
+ --fs-body:clamp(.98rem, .2vw + .92rem, 1.075rem);
+}
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+body { overflow-wrap:break-word; }
+p,li { line-height:1.65; }
+.brand { display:inline-flex;align-items:center;gap:clamp(.45rem,.8vw,.8rem);font-size:clamp(.88rem,.5vw + .75rem,1.12rem);line-height:1.18; }
+.brand img { width:clamp(42px,3.8vw,56px);height:clamp(42px,3.8vw,56px);flex:none;object-fit:contain; }
+.footer-brand .brand img { width:clamp(48px,4.5vw,64px);height:clamp(48px,4.5vw,64px); }
+.main-nav__list a {font-size:clamp(.81rem,.25vw + .75rem,.94rem);}
+.btn {font-size:clamp(.87rem,.22vw + .82rem,1rem);line-height:1.3;}
+.hero__title {font-size:var(--fs-display);overflow-wrap:normal;hyphens:none;}
+.hero__lead {font-size:clamp(1rem,.55vw + .88rem,1.2rem);max-width:58ch;}
+.page-header h1,.page-header__title {font-size:var(--fs-h1);line-height:1.12;}
+.section-head h2 {font-size:var(--fs-h2);line-height:1.16;}
+.service-card h3,.project-card h3 {font-size:clamp(1.2rem,.75vw + .95rem,1.6rem);line-height:1.24;}
+@media (min-width:768px) and (max-width:1100px) {
+ .hero__content {padding-block:clamp(9rem,14vw,12rem) 4rem;}
+ .hero__title {font-size:clamp(2.8rem,5.3vw,4.3rem);}
+ .main-nav__list a {font-size:.82rem;}
+}
+@media (max-width:767px) {
+ :root {--fs-display:clamp(2.15rem,8.4vw,3.65rem);--fs-h1:clamp(1.95rem,7vw,2.85rem);--fs-h2:clamp(1.6rem,5.5vw,2.2rem);--fs-h3:clamp(1.2rem,4.5vw,1.5rem);}
+ .brand img {width:44px;height:44px;}
+ .hero__title {font-size:var(--fs-display);line-height:1.08;max-width:16ch;}
+ .hero__lead {font-size:1rem;line-height:1.6;}
+ .hero__content {padding-block:clamp(8rem,24vw,10rem) 3.5rem;}
+ .btn {font-size:.93rem;}
+}
+@media (max-width:360px) {
+ .brand {font-size:.84rem;gap:.35rem;}
+ .brand img {width:39px;height:39px;}
+ .hero__title {font-size:clamp(2rem,9vw,2.4rem);}
+}
+
+/* Fase 4: catálogo industrial premium, sin modificar identidad oficial. */
+.service-grid{gap:clamp(1rem,2vw,1.6rem);align-items:stretch}
+.service-card,.service-card:nth-child(2n){transform:none;min-height:clamp(440px,39vw,540px);padding:clamp(1.3rem,2.2vw,2rem);border:1px solid rgba(255,255,255,.15);isolation:isolate}
+.service-card:hover,.service-card:nth-child(2n):hover{transform:translateY(-5px)}
+.service-card::after{background:linear-gradient(180deg,rgba(3,23,44,.38) 0%,rgba(3,23,44,.34) 27%,rgba(3,23,44,.90) 62%,rgba(3,23,44,.98) 100%)}
+.service-card__video{opacity:.75;transition:transform .65s ease,opacity .4s ease}
+.service-card:hover .service-card__video{transform:scale(1.035);opacity:.9}
+.service-card__icon{top:1.4rem;left:1.5rem;width:42px;height:42px}
+.service-card__number{top:1.3rem;right:1.5rem;color:rgba(255,255,255,.28);font-size:clamp(2.2rem,3vw,3.1rem)}
+.service-card__tag{margin-top:5rem;color:#ffcf50;letter-spacing:.11em;font-size:.78rem}
+.service-card h3{font-size:clamp(1.4rem,1.4vw + .9rem,1.9rem);line-height:1.18;max-width:22ch;text-wrap:balance}
+.service-card p{font-size:clamp(.9rem,.22vw + .85rem,1rem);line-height:1.55}
+.service-card__list{margin:.45rem 0 1.1rem;gap:.2rem}
+.service-card__list li{font-size:.9rem;line-height:1.45}
+.service-card__actions{margin-top:auto;gap:.85rem;align-items:center}
+.service-card__link{color:#ffe098;text-underline-offset:4px}
+.service-card__link:hover{color:white}
+.service-card__actions .btn{background:#ffbf16;color:#082c53;border-color:#ffbf16;font-weight:700;min-height:42px;display:inline-flex;align-items:center;justify-content:center;text-align:center;white-space:normal}
+.service-card__actions .btn:hover{background:#ffdb66;color:#082c53}
+@media(min-width:768px) and (max-width:1100px){.service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.service-card{min-height:490px}}
+@media(max-width:767px){.service-grid{grid-template-columns:minmax(0,1fr)}.service-card{min-height:465px}.service-card__actions{flex-direction:column;align-items:stretch}.service-card__actions .btn{width:100%}.service-card__link{text-align:center;padding:.35rem}}
+@media(prefers-reduced-motion:reduce){.service-card__video{display:none}.service-card,.service-card:hover,.service-card:nth-child(2n):hover{transform:none;transition:none}}
+
+/* Fase 5: videos en las fichas de los seis servicios */
+.service-detail-media{position:relative;overflow:hidden;border-radius:18px;margin:1.2rem 0 2.5rem;background:#10243a;box-shadow:0 16px 44px rgba(7,28,48,.18)}
+.service-detail-media__video{display:block;width:100%;height:clamp(220px,39vw,520px);object-fit:cover}
+.service-detail-media__label{position:absolute;bottom:16px;left:18px;padding:9px 14px;border-radius:7px;background:rgba(7,33,57,.82);color:white;font-size:clamp(.78rem,1.3vw,.94rem);font-weight:600;letter-spacing:.02em}
+@media(max-width:600px){.service-detail-media{border-radius:12px;margin-bottom:1.7rem}.service-detail-media__video{height:240px}.service-detail-media__label{bottom:10px;left:10px}}
+@media(prefers-reduced-motion:reduce){.service-detail-media__video{animation:none}}
+
+/* Fase 6: diseño editorial inspirado en jerarquía industrial, sin replicar activos de terceros */
+.jht-editorial-hero{position:relative;isolation:isolate;min-height:clamp(460px,58vw,660px);display:flex;align-items:center;background:#092b4d;color:#fff;overflow:hidden}.jht-editorial-hero::before{content:"";position:absolute;inset:0;z-index:-2;background:url('../img/portada-industrial-jht.webp') center/cover no-repeat;opacity:.72}.jht-editorial-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(5,25,48,.96) 0%,rgba(5,25,48,.81) 44%,rgba(5,25,48,.22) 100%)}.jht-editorial-hero--clients::before{background-position:50% 70%}.jht-editorial-hero .container{padding-block:5rem}.jht-editorial-hero h1{font-family:Oswald,sans-serif;font-size:clamp(2.7rem,6vw,5.8rem);line-height:1.08;max-width:850px;letter-spacing:-.025em;margin:.7rem 0 1.3rem;color:#fff}.jht-editorial-hero h1 em{font-style:normal;color:#f2be24}.jht-editorial-hero p:not(.jht-eyebrow){font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.7;max-width:640px;color:#e6edf5;margin-bottom:1.8rem}.jht-eyebrow{color:#f2be24;font-size:.8rem;font-weight:700;letter-spacing:.17em}.jht-editorial-intro h2,.jht-clients-intro h2,.jht-proof-section h2{font-size:clamp(1.9rem,3.6vw,3.2rem);line-height:1.16;max-width:800px}.jht-editorial-intro>.container>p,.jht-clients-intro>.container>p{max-width:780px}.jht-sector-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.4rem;margin-top:2.3rem}.jht-sector-card{border:1px solid #dce4ed;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 12px 35px rgba(11,33,54,.07);transition:transform .25s,box-shadow .25s}.jht-sector-card:hover{transform:translateY(-5px);box-shadow:0 20px 45px rgba(11,33,54,.14)}.jht-sector-card img{width:100%;height:210px;object-fit:cover;background:#dce5eb}.jht-sector-card>div{padding:1.5rem}.jht-sector-card span{font-size:.74rem;letter-spacing:.12em;color:#8b6500;font-weight:700}.jht-sector-card h3{font-size:clamp(1.3rem,2vw,1.65rem);margin:.65rem 0}.jht-sector-card p{font-size:.96rem;line-height:1.6}.jht-sector-card a{font-weight:700;color:#073263;text-decoration:none}.jht-proof-section{padding:clamp(3rem,6vw,6rem) 0;background:#0a2e50;color:#fff}.jht-proof-section h2{color:#fff}.jht-proof-section p:not(.kicker){max-width:700px;color:#d7e4f1}.jht-proof-section .kicker{color:#f2be24}.jht-client-placeholder{margin-top:2.2rem;padding:clamp(2rem,5vw,4.5rem);border:1px dashed #b8c7d7;border-radius:18px;background:#f4f7fa;text-align:center}.jht-client-placeholder__icon{font-size:2rem;color:#c99a16}.jht-client-placeholder h3{font-size:clamp(1.2rem,2vw,1.65rem)}.jht-client-placeholder p{max-width:620px;margin-inline:auto}.jht-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem}@media(max-width:900px){.jht-sector-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.jht-editorial-hero{min-height:470px}.jht-editorial-hero::after{background:linear-gradient(90deg,rgba(5,25,48,.95),rgba(5,25,48,.66))}.jht-editorial-hero .container{padding-block:3.5rem}.jht-sector-grid{grid-template-columns:1fr}.jht-sector-card img{height:190px}.jht-actions{flex-direction:column}.jht-actions a{text-align:center}}@media(prefers-reduced-motion:reduce){.jht-sector-card{transition:none}}
+
+/* Fase 8 — Galería dinámica de proyectos */
+.jht-gallery-section{background:#f4f7fa}.jht-gallery-lead{max-width:720px}.jht-gallery-controls{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:28px 0 18px}.jht-gallery-filters{display:flex;gap:8px;flex-wrap:wrap}.jht-gallery-filter{border:1px solid #ccd5df;border-radius:999px;padding:10px 18px;background:#fff;color:#123452;cursor:pointer;font:inherit;font-weight:600}.jht-gallery-filter.is-active,.jht-gallery-filter:hover{background:#073263;color:#fff;border-color:#073263}.jht-gallery-status{min-height:24px;color:#52677b}.jht-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.jht-gallery-card{display:block;width:100%;padding:0;border:0;text-align:left;background:white;border-radius:14px;overflow:hidden;box-shadow:0 10px 26px rgba(8,32,57,.11);cursor:pointer;transition:transform .2s,box-shadow .2s}.jht-gallery-card:hover{transform:translateY(-4px);box-shadow:0 15px 30px rgba(8,32,57,.18)}.jht-gallery-card img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:#d8e0e8}.jht-gallery-card-body{display:grid;gap:7px;padding:16px 18px}.jht-gallery-card-body small{font-size:.72rem;letter-spacing:.1em;font-weight:700;color:#a46d00}.jht-gallery-card-body strong{font-size:clamp(1rem,1.3vw,1.2rem);color:#092f54;line-height:1.35}.jht-gallery-more{text-align:center;margin-top:26px}.jht-gallery-dialog{position:fixed;inset:0;max-width:min(1050px,94vw);max-height:92vh;padding:40px 18px 18px;border:0;border-radius:16px;background:#fff;box-shadow:0 20px 80px #0007}.jht-gallery-dialog::backdrop{background:rgba(4,18,33,.83)}.jht-gallery-close{position:absolute;right:10px;top:4px;border:0;background:transparent;font-size:2rem;cursor:pointer;color:#073263}.jht-gallery-viewer img,.jht-gallery-viewer video{display:block;max-width:100%;max-height:72vh;margin:auto}.jht-gallery-viewer p{text-align:center;font-weight:700;color:#123452;margin:12px 0 0}@media(max-width:900px){.jht-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.jht-gallery-grid{grid-template-columns:1fr;gap:15px}.jht-gallery-filter{padding:9px 12px;font-size:.9rem}}@media(prefers-reduced-motion:reduce){.jht-gallery-card{transition:none}}

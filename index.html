@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#062e5b" name="theme-color"/>
+<title>JHT Ingeniería — Estructuras Metálicas e Ingeniería Industrial</title>
+<meta content="JHT Ingeniería: estructuras metálicas, corte láser, soldadura especializada y mantenimiento industrial para minería, energía, construcción e industria en Perú." name="description"/>
+<link href="assets/img/logo-jht-oficial.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="assets/css/styles.css" rel="stylesheet"/>
+<link href="assets/css/jht-modern.css" rel="stylesheet"/>
+</head>
+<body>
+<div data-include="components/header.html"></div>
+<main>
+<!-- HERO: video de fondo (con imagen de respaldo si falla) + propuesta
+         de valor y datos clave, composición asimétrica 60/40. -->
+<section class="hero">
+<div class="hero__media">
+<img alt="Ilustración conceptual de una planta industrial con estructuras metálicas y personal técnico" decoding="async" fetchpriority="high" src="assets/img/portada-industrial-jht.webp"/>
+</div>
+<div class="container hero__content">
+<div data-reveal="">
+<p class="hero__eyebrow">Ingeniería &amp; estructuras metálicas — Perú</p>
+<h1 class="hero__title">Ingeniería que <em>impulsa tu industria</em></h1>
+<p class="hero__lead">Diseñamos, fabricamos y montamos estructuras metálicas, y brindamos mantenimiento industrial especializado para minería, energía, construcción e industria — con los más altos estándares de calidad y seguridad.</p>
+<div class="hero__actions">
+<a class="btn btn--primary" href="contacto/">Solicitar cotización</a>
+<a class="btn btn--secondary" href="servicios/">Conocer servicios</a>
+</div>
+</div>
+<div class="hero__stats" data-reveal-group="">
+<div class="hero__stat" data-reveal="right">
+<strong data-counter="5" data-counter-suffix="+">0+</strong>
+<span>Años de experiencia</span>
+</div>
+<div class="hero__stat" data-reveal="right">
+<strong data-counter="25" data-counter-suffix="+">0+</strong>
+<span>Proyectos completados</span>
+</div>
+</div>
+</div>
+<span aria-hidden="true" class="hero__scroll-cue"></span>
+</section>
+<!-- FRANJA DE CONTADORES: distinta de los 2 datos flotantes del hero
+         (esos siguen ahí, arriba); esta es la franja completa de 4 cifras
+         pedida justo debajo del hero. Reutiliza el mismo componente
+         .counters/.counter que ya usa Nosotros, con animación al hacer
+         scroll vía data-counter (ver assets/js/animations.js). -->
+<!-- SERVICIOS PRINCIPALES -->
+<section class="section" id="servicios-destacados">
+<div class="container">
+<div class="section-head" data-reveal="">
+<p class="kicker">Lo que hacemos</p>
+<h2>Servicios principales</h2>
+<p>Cobertura integral: desde el diseño y fabricación hasta el montaje y mantenimiento de estructuras y equipos industriales.</p>
+</div>
+<!-- Tarjetas "v2": numeración + tag técnico en inglés + bullets de
+             sub-servicios + botón de cotización propio por tarjeta (antes
+             solo tenían ícono + título + texto + un enlace). -->
+<div class="service-grid" data-reveal-group="">
+<article class="service-card" data-reveal="">
+<video aria-hidden="true" autoplay="" class="service-card__video" loop="" muted="" playsinline="" preload="none">
+<source src="https://res.cloudinary.com/o6pcvfxm/video/upload/v1793161908/Estructuras_Metalicas.mp4" type="video/mp4"/>
+</video>
+<span aria-hidden="true" class="service-card__number">01</span>
+<span aria-hidden="true" class="service-card__icon">
+<svg fill="none" stroke="currentColor" stroke-width="2.4" viewbox="0 0 48 48"><path d="M6 40 L24 8 L42 40 Z"></path><path d="M14 40 L24 20 L34 40"></path><path d="M6 40 H42"></path></svg>
+</span>
+<p class="service-card__tag">Engineering</p>
+<h3>Estructuras metálicas</h3>
+<p>Puentes, naves industriales, almacenes y techos parabólicos, diseñados a medida.</p>
+<ul class="service-card__list">
+<li>Cálculo estructural</li>
+<li>Fabricación en taller</li>
+<li>Montaje en obra</li>
+</ul>
+<div class="service-card__actions">
+<a class="service-card__link" href="servicios/estructuras-metalicas.html">Ver especificaciones →</a>
+<a class="btn btn--cotizacion btn--sm" href="contacto/">Cotizar</a>
+</div>
+</article>
+<article class="service-card" data-reveal="">
+<video aria-hidden="true" autoplay="" class="service-card__video" loop="" muted="" playsinline="" preload="none">
+<source src="https://res.cloudinary.com/o6pcvfxm/video/upload/v1793161795/Corte_Laser.mp4" type="video/mp4"/>
+</video>
+<span aria-hidden="true" class="service-card__number">02</span>
+<span aria-hidden="true" class="service-card__icon">
+<svg fill="none" stroke="currentColor" stroke-width="2.4" viewbox="0 0 48 48"><path d="M8 8 L40 40 M40 8 L8 40"></path><circle cx="24" cy="24" fill="currentColor" r="5" stroke="none"></circle></svg>
+</span>
+<p class="service-card__tag">Fabrication</p>
+<h3>Corte láser a medida</h3>
+<p>Corte de precisión sobre plancha metálica para piezas y componentes personalizados.</p>
+<ul class="service-card__list">
+<li>Corte CNC de precisión</li>
+<li>Planos DXF, DWG o STEP</li>
+<li>Piezas y componentes a medida</li>
+</ul>
+<div class="service-card__actions">
+<a class="service-card__link" href="servicios/corte-laser.html">Ver especificaciones →</a>
+<a class="btn btn--cotizacion btn--sm" href="contacto/">Cotizar</a>
+</div>
+</article>
+<article class="service-card" data-reveal="">
+<video aria-hidden="true" autoplay="" class="service-card__video" loop="" muted="" playsinline="" preload="none">
+<source src="https://res.cloudinary.com/o6pcvfxm/video/upload/v1793161909/Soladura_Especializada.mp4" type="video/mp4"/>
+</video>
+<span aria-hidden="true" class="service-card__number">03</span>
+<span aria-hidden="true" class="service-card__icon">
+<svg fill="none" stroke="currentColor" stroke-width="2.4" viewbox="0 0 48 48"><path d="M10 38 L22 26"></path><path d="M18 14 L34 30 L38 26 L22 10 Z"></path><path d="M8 40 L14 34"></path></svg>
+</span>
+<p class="service-card__tag">Assembly</p>
+<h3>Soldadura especializada</h3>
+<p>Procesos TIG, MIG y MAG certificados, para uniones críticas de alta exigencia.</p>
+<ul class="service-card__list">
+<li>Procesos TIG, MIG y MAG</li>
+<li>Soldadores calificados</li>
+<li>Uniones críticas certificadas</li>
+</ul>
+<div class="service-card__actions">
+<a class="service-card__link" href="servicios/soldadura.html">Ver especificaciones →</a>
+<a class="btn btn--cotizacion btn--sm" href="contacto/">Cotizar</a>
+</div>
+</article>
+<article class="service-card" data-reveal="">
+<video aria-hidden="true" autoplay="" class="service-card__video" loop="" muted="" playsinline="" preload="none">
+<source src="https://res.cloudinary.com/o6pcvfxm/video/upload/v1793161909/Maquinado.mp4" type="video/mp4"/>
+</video>
+<span aria-hidden="true" class="service-card__number">04</span>
+<span aria-hidden="true" class="service-card__icon">
+<svg fill="none" stroke="currentColor" stroke-width="2.4" viewbox="0 0 48 48"><circle cx="24" cy="24" r="6"></circle><path d="M24 4 V12 M24 36 V44 M4 24 H12 M36 24 H44"></path><rect height="8" rx="1" transform="rotate(-20 26 24)" width="20" x="16" y="20"></rect></svg>
+</span>
+<p class="service-card__tag">Machining</p>
+<h3>Servicios de maquinado y maestranza</h3>
+<p>Torno CNC y mecánico, fresadora, taladro y cepillo para piezas y componentes industriales.</p>
+<ul class="service-card__list">
+<li>Torno CNC y mecánico</li>
+<li>Fresadora</li>
+<li>Taladro y cepillo</li>
+</ul>
+<div class="service-card__actions">
+<a class="service-card__link" href="servicios/maquinado-maestranza.html">Ver especificaciones →</a>
+<a class="btn btn--cotizacion btn--sm" href="contacto/">Cotizar</a>
+</div>
+</article>
+<article class="service-card" data-reveal="">
+<video aria-hidden="true" autoplay="" class="service-card__video" loop="" muted="" playsinline="" preload="none">
+<source src="https://res.cloudinary.com/o6pcvfxm/video/upload/v1793161911/Mantenimiento_Inductrial.mp4" type="video/mp4"/>
+</video>
+<span aria-hidden="true" class="service-card__number">05</span>
+<span aria-hidden="true" class="service-card__icon">
+<svg fill="none" stroke="currentColor" stroke-width="2.4" viewbox="0 0 48 48"><circle cx="24" cy="24" r="8"></circle><path d="M24 6 V12 M24 36 V42 M6 24 H12 M36 24 H42 M11 11 L15.5 15.5 M32.5 32.5 L37 37 M37 11 L32.5 15.5 M15.5 32.5 L11 37"></path></svg>
+</span>
+<p class="service-card__tag">Maintenance</p>
+<h3>Mantenimiento industrial</h3>
+<p>Mantenimiento preventivo y correctivo de equipos mecánicos en planta.</p>
+<ul class="service-card__list">
+<li>Mantenimiento preventivo</li>
+<li>Mantenimiento correctivo</li>
+<li>Diagnóstico técnico</li>
+</ul>
+<div class="service-card__actions">
+<a class="service-card__link" href="servicios/mantenimiento.html">Ver especificaciones →</a>
+<a class="btn btn--cotizacion btn--sm" href="contacto/">Cotizar</a>
+</div>
+</article>
+<article class="service-card" data-reveal="">
+<video aria-hidden="true" autoplay="" class="service-card__video" loop="" muted="" playsinline="" preload="none">
+<source src="https://res.cloudinary.com/o6pcvfxm/video/upload/v1793161772/Bombas.mp4" type="video/mp4"/>
+</video>
+<span aria-hidden="true" class="service-card__number">06</span>
+<span aria-hidden="true" class="service-card__icon">
+<svg fill="none" stroke="currentColor" stroke-width="2.4" viewbox="0 0 48 48"><path d="M24 8 V18 M24 40 V30 M14 24 H8 M40 24 H34"></path><rect height="12" rx="2" width="20" x="14" y="18"></rect></svg>
+</span>
+<p class="service-card__tag">Maintenance</p>
+<h3>Bombas y válvulas</h3>
+<p>Diagnóstico, reparación y mantenimiento de bombas y válvulas industriales.</p>
+<ul class="service-card__list">
+<li>Diagnóstico de fallas</li>
+<li>Reparación y reacondicionamiento</li>
+<li>Reemplazo de componentes</li>
+</ul>
+<div class="service-card__actions">
+<a class="service-card__link" href="servicios/bombas-valvulas.html">Ver especificaciones →</a>
+<a class="btn btn--cotizacion btn--sm" href="contacto/">Cotizar</a>
+</div>
+</article>
+</div>
+</div>
+</section>
+<!-- SECTORES ATENDIDOS -->
+<section class="section section--offwhite">
+<div class="container">
+<div class="section-head" data-reveal="">
+<p class="kicker">Dónde trabajamos</p>
+<h2>Sectores atendidos</h2>
+</div>
+<div class="sector-row" data-reveal-group="">
+<div class="sector-row__item" data-reveal="">
+<svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 48 48"><path d="M8 40 L16 20 L24 32 L30 16 L40 40 Z"></path></svg>
+<span>Minería</span>
+</div>
+<div class="sector-row__item" data-reveal="">
+<svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 48 48"><path d="M26 6 L12 26 H22 L18 42 L36 20 H26 Z"></path></svg>
+<span>Energía</span>
+</div>
+<div class="sector-row__item" data-reveal="">
+<svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 48 48"><rect height="22" width="14" x="8" y="18"></rect><rect height="30" width="14" x="26" y="10"></rect><path d="M8 18 L15 10 L22 18"></path></svg>
+<span>Industrial</span>
+</div>
+<div class="sector-row__item" data-reveal="">
+<svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 48 48"><path d="M6 40 H42 M10 40 V22 L24 10 L38 22 V40"></path><path d="M18 40 V28 H30 V40"></path></svg>
+<span>Construcción</span>
+</div>
+<div class="sector-row__item" data-reveal="">
+<svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 48 48"><circle cx="24" cy="24" r="16"></circle><path d="M24 16 V24 L30 28"></path></svg>
+<span>Mantenimiento</span>
+</div>
+</div>
+</div>
+</section>
+<!-- PROYECTOS DESTACADOS -->
+
+<!-- DIFERENCIADORES -->
+<section class="section section--dark">
+<div class="container">
+<div class="section-head" data-reveal="">
+<p class="kicker">Por qué JHT</p>
+<h2>Diferenciadores</h2>
+</div>
+<div class="diff-list" data-reveal-group="">
+<div class="diff-list__item" data-reveal="left">
+<div>
+<h3>Ingeniería propia</h3>
+<p>Cálculo y diseño estructural en casa, no tercerizado, con trazabilidad de principio a fin.</p>
+</div>
+</div>
+<div class="diff-list__item" data-reveal="left">
+<div>
+<h3>Certificaciones vigentes</h3>
+<p>Procesos alineados a ISO/IEC 17025, ISO 45001 y normas ASME/API según el proyecto.</p>
+</div>
+</div>
+<div class="diff-list__item" data-reveal="left">
+<div>
+<h3>Cumplimiento de plazos</h3>
+<p>Planificación de obra con control de avance semanal y comunicación directa con el cliente.</p>
+</div>
+</div>
+<div class="diff-list__item" data-reveal="left">
+<div>
+<h3>Seguridad primero</h3>
+<p>Cultura de seguridad industrial en taller y en campo, con supervisión SST permanente.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA FINAL -->
+<section class="section section--tight">
+<div class="container">
+<div class="cta-banner" data-reveal="scale">
+<div>
+<h2>¿Tienes un proyecto en mente?</h2>
+<p>Cuéntanos qué necesitas y te preparamos una propuesta técnica.</p>
+</div>
+<a class="btn btn--secondary" href="contacto/">Contáctanos</a>
+</div>
+</div>
+</section>
+</main>
+<div data-include="components/footer.html"></div>
+<div data-include="components/whatsapp-button.html"></div>
+<script src="assets/js/includes.js"></script>
+<script src="assets/js/menu.js"></script>
+<script src="assets/js/animations.js"></script>
+<script src="assets/js/whatsapp.js"></script>
+</body>
+</html>

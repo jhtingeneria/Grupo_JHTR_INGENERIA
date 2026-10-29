@@ -1,0 +1,1455 @@
+/* ============================================================================
+   ARCHIVO: assets/css/styles.css
+   PROYECTO: Sitio web JHT Ingeniería — Fase 1 (estructura, diseño, maquetado)
+   QUÉ HACE: Hoja de estilos única del sitio. Contiene el sistema de diseño
+   (variables de color/tipografía/espaciado), el reset base, los componentes
+   compartidos (header, nav, botones, footer, botón flotante de WhatsApp) y
+   los estilos específicos de cada página.
+   POR QUÉ UN SOLO ARCHIVO: la Fase 1 es solo maquetado; se mantiene un único
+   styles.css (según estructura de carpetas definida) organizado por
+   secciones numeradas para que sea fácil de navegar y mantener.
+   CÓMO SE RELACIONA: se enlaza desde el <head> de cada index.html del sitio.
+   Los estilos de animación (transiciones/keyframes) se coordinan con
+   assets/js/animations.js, que añade/quita las clases que aquí se definen
+   (.is-visible, .is-open, .counted, etc.).
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+   1. VARIABLES GLOBALES (paleta, tipografía, espaciado)
+   Paleta propia: azul industrial + grafito como base, naranja de seguridad
+   como acento (se evita el típico "azul corporativo + celeste" genérico).
+   Tipografía: Oswald (condensada, carácter industrial) para títulos y
+   Work Sans para texto de lectura — se evita la combinación por defecto
+   Inter + Poppins.
+---------------------------------------------------------------------------- */
+:root {
+  /* Color — grafito (neutros oscuros) */
+  --color-graphite-950: #12161a;
+  --color-graphite-900: #1a2126;
+  --color-graphite-800: #232b32;
+  --color-graphite-700: #3a444d;
+
+  /* Color — azul industrial (marca) */
+  --color-blue-900: #0e2b47;
+  --color-blue-700: #1c4d7c;
+  --color-blue-500: #2f6ea5;
+  --color-blue-100: #dce8f2;
+
+  /* Color — acento naranja de seguridad */
+  --color-orange-700: #c94a04;
+  --color-orange-600: #e85d04;
+  --color-orange-500: #ff7b1c;
+  --color-orange-100: #ffe4cf;
+
+  /* Color — acento amarillo de seguridad (uso puntual, franjas/íconos) */
+  --color-yellow-400: #ffc300;
+
+  /* Color — neutros claros */
+  --color-white: #ffffff;
+  --color-offwhite: #f4f5f7;
+  --color-gray-200: #e4e6e9;
+  --color-gray-400: #9aa3ab;
+  --color-gray-600: #5b6570;
+
+  /* Tipografía */
+  --font-heading: 'Oswald', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+  --font-body: 'Work Sans', 'Segoe UI', Roboto, sans-serif;
+
+  /* Escala tipográfica fluida */
+  --fs-display: clamp(2.6rem, 5vw + 1rem, 5.4rem);
+  --fs-h1: clamp(2.2rem, 3.4vw + 1rem, 3.6rem);
+  --fs-h2: clamp(1.8rem, 2.4vw + 1rem, 2.6rem);
+  --fs-h3: clamp(1.3rem, 1.2vw + 1rem, 1.7rem);
+  --fs-body: 1rem;
+
+  /* Espaciado */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.75rem;
+  --space-lg: 3rem;
+  --space-xl: 5rem;
+  --space-2xl: 8rem;
+
+  /* Layout */
+  --container-width: 1240px;
+  --container-pad: clamp(1.25rem, 4vw, 3rem);
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --header-height: 84px;
+
+  /* Sombra / transición */
+  --transition-base: 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   2. RESET Y BASE
+---------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-height);
+  /* Las secciones [data-reveal="left"/"right"] arrancan desplazadas
+     ±32px (translateX) antes de entrar en pantalla y animarse a su
+     posición final (ver sección 14, ANIMACIONES DE SCROLL). Sin este
+     overflow-x en el elemento raíz (el que realmente controla el
+     scroll de la página, no <body>), ese desplazamiento de una sección
+     que todavía no fue revelada — aunque esté más abajo en la página —
+     alcanza a generar una franja de scroll horizontal real, sobre todo
+     en mobile angosto. */
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--color-graphite-900);
+  background: var(--color-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+/* Fallback visual cuando una imagen no carga: evita que el layout se rompa
+   mostrando un recuadro con textura + texto, en vez del ícono roto nativo. */
+img.js-media-fallback {
+  background: linear-gradient(135deg, var(--color-graphite-800), var(--color-graphite-700));
+  min-height: 220px;
+  position: relative;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.08;
+  margin: 0 0 var(--space-sm);
+  color: var(--color-graphite-950);
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+p { margin: 0 0 var(--space-sm); color: var(--color-graphite-700); }
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+/* Franja de "sección" con separación vertical uniforme */
+.section {
+  padding-block: var(--space-2xl);
+}
+.section--tight { padding-block: var(--space-xl); }
+.section--dark {
+  background: var(--color-graphite-950);
+  color: var(--color-white);
+}
+.section--dark p { color: var(--color-gray-200); }
+.section--dark h2, .section--dark h3 { color: var(--color-white); }
+.section--offwhite { background: var(--color-offwhite); }
+
+/* Encabezado de sección: kicker + título + barra de acento (composición
+   asimétrica: el bloque de texto no está centrado por defecto). */
+.section-head {
+  max-width: 640px;
+  margin-bottom: var(--space-lg);
+}
+.section-head--center { margin-inline: auto; text-align: center; }
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-orange-600);
+  margin-bottom: var(--space-xs);
+}
+.kicker::before {
+  content: '';
+  width: 28px;
+  height: 3px;
+  background: var(--color-orange-600);
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------------------------
+   3. BOTONES
+---------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.9rem;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base), color var(--transition-base);
+  white-space: nowrap;
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn--primary {
+  background: var(--color-orange-600);
+  color: var(--color-white);
+  box-shadow: 0 10px 24px -8px rgba(232, 93, 4, 0.55);
+}
+.btn--primary:hover { background: var(--color-orange-500); }
+
+.btn--secondary {
+  background: transparent;
+  border-color: currentColor;
+  color: var(--color-graphite-950);
+}
+.btn--secondary:hover { background: var(--color-graphite-950); color: var(--color-white); }
+
+.section--dark .btn--secondary,
+.hero .btn--secondary { color: var(--color-white); }
+.section--dark .btn--secondary:hover,
+.hero .btn--secondary:hover { background: var(--color-white); color: var(--color-graphite-950); }
+
+.btn--block { width: 100%; }
+.btn--sm { padding: 0.6rem 1.2rem; font-size: 0.8rem; }
+
+/* Botón destacado "Solicitar Cotización": visual únicamente en esta fase.
+   Lleva data-fase="2" para que quede documentado en el propio markup que la
+   lógica de carrito/cotización se conecta en la Fase 2. */
+.btn--cotizacion {
+  background: var(--color-yellow-400);
+  color: var(--color-graphite-950);
+  box-shadow: 0 10px 24px -8px rgba(255, 195, 0, 0.55);
+}
+.btn--cotizacion:hover { background: #ffd333; }
+
+/* Variante dentro del nav del header: tamaño ajustado a la misma escala que
+   el resto de ítems del menú (padding vertical y font-size iguales a
+   .main-nav__list a:not(.btn)), sin agrandarse por encima de ellos. Solo
+   aplica al botón del header — las variantes "Cotizar" con .btn--sm en
+   tarjetas de servicio no se ven afectadas por este selector. */
+.main-nav__list .btn--cotizacion {
+  padding-block: 0.3rem;
+  padding-inline: 1rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------------------
+   4. HEADER / NAVEGACIÓN
+---------------------------------------------------------------------------- */
+.site-header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 900;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  transition: transform var(--transition-base);
+}
+/* El fondo con blur va en un ::before (no directamente en .site-header)
+   a propósito: backdrop-filter en un elemento convierte a ese elemento en
+   "containing block" de sus descendientes position:fixed. Si el fondo
+   fuera del propio .site-header, el <nav> móvil (position:fixed, hijo de
+   este header) quedaría posicionado relativo a los 84px del header en vez
+   de a la ventana completa, rompiendo el panel del menú móvil. Al vivir
+   el blur en un pseudo-elemento (sin hijos), el header en sí no genera
+   ese containing block y el menú móvil se posiciona correctamente. */
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(18, 22, 26, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color var(--transition-base);
+}
+/* Clase añadida por menu.js cuando se hace scroll hacia abajo, para ganar
+   espacio de lectura; se retira al subir de nuevo. */
+.site-header.is-hidden { transform: translateY(-100%); }
+.site-header.is-scrolled::before { background: rgba(18, 22, 26, 0.94); }
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  letter-spacing: 0.03em;
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+.brand img { height: 38px; width: auto; }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 950;
+}
+.nav-toggle span {
+  width: 26px;
+  height: 2px;
+  background: var(--color-white);
+  transition: transform var(--transition-base), opacity var(--transition-base);
+}
+.nav-toggle.is-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-active span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.main-nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.main-nav__list a:not(.btn) {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  position: relative;
+  padding-block: 0.3rem;
+}
+.main-nav__list a:not(.btn)::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 100%;
+  bottom: -2px;
+  height: 2px;
+  background: var(--color-orange-600);
+  transition: right var(--transition-base);
+}
+.main-nav__list a:not(.btn):hover::after,
+.main-nav__list a.is-active::after { right: 0; }
+
+/* ----------------------------------------------------------------------------
+   5. HERO (portada de Inicio)
+---------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  color: var(--color-white);
+  overflow: hidden;
+  background: var(--color-graphite-950);
+}
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero__media video,
+.hero__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* El video va por encima; la imagen de respaldo queda debajo y solo se ve
+   si animations.js oculta el <video> tras un error de carga. */
+.hero__media video { z-index: 2; }
+.hero__media img { z-index: 1; }
+.hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 20, 25, 0.55) 0%, rgba(14, 20, 25, 0.65) 45%, rgba(14, 20, 25, 0.95) 100%);
+}
+.hero__content {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--space-2xl) var(--space-xl);
+  /* Composición asimétrica: el bloque principal ocupa ~60% y deja el resto
+     libre para que la imagen de fondo respire en el lado derecho. */
+  display: grid;
+  grid-template-columns: minmax(0, 720px) 1fr;
+  gap: var(--space-lg);
+  align-items: end;
+}
+.hero__eyebrow {
+  font-family: var(--font-heading);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-orange-500);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-sm);
+}
+.hero__title {
+  font-size: var(--fs-display);
+  margin-bottom: var(--space-md);
+}
+.hero__title em {
+  font-style: normal;
+  color: var(--color-orange-500);
+}
+.hero__lead {
+  max-width: 46ch;
+  font-size: 1.15rem;
+  color: var(--color-gray-200);
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+/* Tarjetas de dato flotantes sobre el hero (lado derecho, asimétrico) */
+.hero__stats {
+  display: grid;
+  gap: var(--space-sm);
+  align-self: end;
+}
+.hero__stat {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.hero__stat strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--color-orange-500);
+}
+.hero__stat span { font-size: 0.85rem; color: var(--color-gray-200); }
+
+.hero__scroll-cue {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  width: 26px;
+  height: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+}
+.hero__scroll-cue::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 4px;
+  height: 8px;
+  background: var(--color-orange-500);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  animation: scrollCue 1.8s infinite;
+}
+@keyframes scrollCue {
+  0% { opacity: 1; top: 8px; }
+  70% { opacity: 0; top: 20px; }
+  100% { opacity: 0; top: 8px; }
+}
+
+/* Encabezado interno para páginas que no son el hero de inicio */
+.page-header {
+  position: relative;
+  padding-block: calc(var(--header-height) + var(--space-xl)) var(--space-xl);
+  color: var(--color-white);
+  background: linear-gradient(120deg, var(--color-blue-900), var(--color-graphite-950) 70%);
+  overflow: hidden;
+}
+.page-header::after {
+  /* Franja diagonal de acento — refuerzo de identidad "seguridad industrial" */
+  content: '';
+  position: absolute;
+  right: -10%;
+  top: -20%;
+  width: 55%;
+  height: 160%;
+  background: var(--color-orange-600);
+  opacity: 0.12;
+  transform: rotate(14deg);
+}
+.page-header__kicker { color: var(--color-orange-500); }
+.page-header h1 { color: var(--color-white); max-width: 18ch; }
+.page-header p { color: var(--color-gray-200); max-width: 60ch; }
+
+/* ----------------------------------------------------------------------------
+   6. TARJETAS Y GRIDS (servicios, proyectos, valores, certificaciones)
+---------------------------------------------------------------------------- */
+.grid {
+  display: grid;
+  gap: var(--space-md);
+}
+.grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; }
+.grid--2-lead { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; }
+
+/* Grid asimétrico de servicios: la segunda y quinta tarjeta "flotan" más
+   arriba para romper la retícula perfectamente simétrica. */
+.service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+.service-card {
+  background: var(--color-graphite-950);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  position: relative; /* referencia para el numeral en la esquina (.service-card__number) */
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: transform var(--transition-base);
+}
+.service-card:nth-child(2n) { transform: translateY(-1.75rem); }
+.service-card:hover { transform: translateY(-2.25rem); }
+.service-card__icon {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  width: 46px;
+  height: 46px;
+  color: var(--color-orange-500);
+}
+.service-card__icon svg { width: 100%; height: 100%; }
+.service-card h3 { color: var(--color-white); margin-bottom: 0.4rem; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85); }
+.service-card p { color: rgba(255, 255, 255, 0.9); font-size: 0.92rem; margin-bottom: var(--space-sm); text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85); }
+.service-card__link {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-orange-500);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+/* Video de fondo por tarjeta de servicio (alojado en Cloudinary, cuenta
+   "iqmsqomd"): cubre la tarjeta detrás del resto del contenido, con un
+   degradé oscuro encima (::after) para que el texto siga siendo legible.
+   Todo lo demás dentro de .service-card sube a z-index:2 para quedar
+   por encima. */
+.service-card__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.92;
+}
+.service-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* Casi transparente arriba (el video se ve nítido donde no hay texto) y
+     oscuro solo desde donde empieza el bloque de texto (.service-card usa
+     justify-content:flex-end, así que el contenido siempre vive en el
+     tercio inferior) para que siga siendo legible sin opacar el video. */
+  background: linear-gradient(180deg, rgba(18, 22, 26, 0.05) 0%, rgba(18, 22, 26, 0.15) 45%, rgba(18, 22, 26, 0.9) 75%, rgba(18, 22, 26, 0.94) 100%);
+}
+.service-card__icon { z-index: 2; }
+.service-card__number,
+.service-card__tag,
+.service-card h3,
+.service-card p,
+.service-card__list,
+.service-card__actions {
+  position: relative;
+  z-index: 2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .service-card__video { display: none; }
+}
+
+/* Sectores atendidos: fila de íconos propios en SVG */
+.sector-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-md);
+  text-align: center;
+}
+.sector-row__item svg { width: 44px; height: 44px; margin-inline: auto; color: var(--color-orange-600); }
+.sector-row__item span { display: block; margin-top: 0.6rem; font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; }
+
+/* Diferenciadores: lista numerada con estilo propio (no bullets genéricos) */
+.diff-list { display: grid; gap: var(--space-md); counter-reset: diff; }
+.diff-list__item { display: grid; grid-template-columns: 64px 1fr; gap: var(--space-md); counter-increment: diff; }
+.diff-list__item::before {
+  content: counter(diff, decimal-leading-zero);
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  color: var(--color-orange-600);
+  border: 2px solid var(--color-orange-600);
+  border-radius: 50%;
+  width: 64px; height: 64px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* CTA banner (llamado a la acción) */
+.cta-banner {
+  position: relative;
+  background: var(--color-orange-600);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  overflow: hidden;
+}
+.cta-banner::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,0.08) 0 10px, transparent 10px 24px);
+}
+.cta-banner > * { position: relative; z-index: 1; }
+.cta-banner h2 { color: var(--color-white); margin-bottom: 0.25rem; }
+.cta-banner .btn--secondary { border-color: var(--color-white); color: var(--color-white); }
+.cta-banner .btn--secondary:hover { background: var(--color-white); color: var(--color-orange-700); }
+
+/* ----------------------------------------------------------------------------
+   7. CONTADORES ANIMADOS (Nosotros)
+---------------------------------------------------------------------------- */
+.counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); }
+.counter { text-align: left; border-left: 3px solid var(--color-orange-600); padding-left: var(--space-sm); }
+.counter__value {
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 3vw, 3.4rem);
+  color: var(--color-graphite-950);
+  display: inline-flex;
+}
+.section--dark .counter__value { color: var(--color-white); }
+.counter__label { display: block; color: var(--color-gray-600); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.section--dark .counter__label { color: var(--color-gray-400); }
+
+/* Certificaciones */
+.cert-row { display: flex; flex-wrap: wrap; gap: var(--space-md); align-items: center; }
+.cert-badge {
+  display: flex; align-items: center; gap: 0.6rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1.1rem;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+}
+.cert-badge svg { width: 22px; height: 22px; color: var(--color-blue-700); }
+
+/* ----------------------------------------------------------------------------
+   8. GALERÍA DE PROYECTOS (filtro por sector)
+---------------------------------------------------------------------------- */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: var(--space-lg); }
+.filter-btn {
+  padding: 0.55rem 1.2rem;
+  border: 2px solid var(--color-gray-200);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+}
+.filter-btn.is-active,
+.filter-btn:hover { background: var(--color-graphite-950); border-color: var(--color-graphite-950); color: var(--color-white); }
+
+.project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+.project-card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+/* Oculta (sin quitar del DOM) las tarjetas que no calzan con el filtro
+   activo; el JS de animations.js alterna esta clase. */
+.project-card[hidden] { display: none; }
+.project-card__media { aspect-ratio: 4 / 3; overflow: hidden; }
+.project-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.project-card:hover .project-card__media img { transform: scale(1.06); }
+.project-card__body { padding: var(--space-sm) var(--space-md) var(--space-md); }
+.project-card__tag {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-orange-700);
+  background: var(--color-orange-100);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+}
+.project-card h3 { font-size: 1.15rem; margin-bottom: 0.35rem; }
+.project-card p { font-size: 0.92rem; margin-bottom: 0; }
+
+/* ----------------------------------------------------------------------------
+   9. CLIENTES (logos placeholder)
+---------------------------------------------------------------------------- */
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-md);
+  align-items: center;
+}
+.logo-grid__item {
+  height: 96px;
+  border: 1px dashed var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: grayscale(1);
+  opacity: 0.75;
+  transition: opacity var(--transition-base), filter var(--transition-base);
+}
+.logo-grid__item:hover { opacity: 1; filter: grayscale(0); }
+.logo-grid__item img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.testimonial {
+  background: var(--color-offwhite);
+  border-left: 4px solid var(--color-orange-600);
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+}
+.testimonial p { font-size: 1.05rem; font-style: italic; }
+.testimonial cite { font-style: normal; font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; }
+
+/* ----------------------------------------------------------------------------
+   10. FORMULARIOS (Contacto / Reclamaciones) — visuales, sin envío en Fase 1
+---------------------------------------------------------------------------- */
+/* grid-template-columns explícito con minmax(0, 1fr) en vez de dejarlo
+   implícito o en "1fr" a secas: sin el mínimo en 0, la columna no puede
+   encogerse por debajo del min-content de su contenido (selects, texto
+   largo) y termina desbordando el viewport en mobile angosto. */
+.form-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-md); }
+.form-field { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.4rem; }
+.form-field label {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-graphite-800);
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--color-blue-500);
+  box-shadow: 0 0 0 3px rgba(47, 110, 165, 0.18);
+}
+.form-row-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-md); }
+
+.form-note {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  background: var(--color-blue-100);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9rem;
+  color: var(--color-blue-900);
+}
+.form-note svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-blue-700); }
+
+/* --- Adjuntar archivos (Solicitud de Cotización): mensaje de rechazo
+   inline por archivo puntual y listado visual de archivos aceptados, con
+   botón "Quitar" por archivo. Generados por manejarSeleccionArchivos() en
+   assets/js/animations.js; sin subir nada a un servidor todavía. --- */
+.form-file-error {
+  display: none;
+  font-size: 0.85rem;
+  color: #b3261e;
+}
+.form-file-error:not(:empty) { display: block; }
+
+.form-file-list {
+  display: grid;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.form-file-list:empty { display: none; }
+.form-file-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.8rem;
+  font-size: 0.88rem;
+  color: var(--color-graphite-800);
+}
+.form-file-list__remove {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-orange-600);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.form-file-list__remove:hover { color: var(--color-orange-500); text-decoration: underline; }
+
+.map-embed {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-gray-200);
+}
+.map-embed iframe { width: 100%; height: 380px; border: 0; }
+
+.contact-info { display: grid; gap: var(--space-md); }
+.contact-info__item { display: flex; gap: 0.8rem; align-items: flex-start; }
+.contact-info__item svg { width: 24px; height: 24px; color: var(--color-orange-600); flex-shrink: 0; }
+.contact-info__item h3 { font-size: 1rem; margin-bottom: 0.15rem; }
+.contact-info__item p { font-size: 0.92rem; margin-bottom: 0; }
+
+/* ----------------------------------------------------------------------------
+   10-B. FICHA TÉCNICA DE SERVICIO (páginas servicios/[categoria].html)
+---------------------------------------------------------------------------- */
+.service-hero {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+}
+/* table-layout: fixed evita que celdas con texto largo sin espacios
+   (ej. "Acero estructural ASTM A36 / A572, según diseño") fuercen la
+   tabla completa a ensancharse más allá del viewport en mobile — con
+   layout automático, el ancho de columna se calcula por contenido en
+   vez de respetar el 40%/60% ya definido para th/td. */
+.spec-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.spec-table caption {
+  text-align: left;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-orange-700);
+  margin-bottom: var(--space-sm);
+}
+.spec-table th,
+.spec-table td {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--color-gray-200);
+  font-size: 0.94rem;
+}
+.spec-table th {
+  width: 40%;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-graphite-800);
+  background: var(--color-offwhite);
+}
+.spec-note {
+  font-size: 0.82rem;
+  color: var(--color-gray-600);
+  margin-top: var(--space-xs);
+}
+.app-list { display: grid; gap: 0.6rem; }
+.app-list li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: 0.96rem;
+}
+.app-list li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.5rem;
+  width: 10px; height: 10px;
+  background: var(--color-orange-600);
+  transform: rotate(45deg);
+}
+.service-crumbs {
+  display: flex; gap: 0.4rem; align-items: center;
+  font-size: 0.85rem; color: var(--color-gray-400);
+  margin-bottom: var(--space-sm);
+}
+.service-crumbs a { color: var(--color-orange-500); }
+
+/* ----------------------------------------------------------------------------
+   11. POLÍTICAS
+---------------------------------------------------------------------------- */
+.policy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+.policy-card { border-top: 4px solid var(--color-orange-600); padding-top: var(--space-md); }
+.policy-card ul { display: grid; gap: 0.5rem; margin-top: var(--space-sm); }
+.policy-card li { position: relative; padding-left: 1.4rem; font-size: 0.92rem; color: var(--color-graphite-700); }
+.policy-card li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.45rem;
+  width: 8px; height: 8px;
+  background: var(--color-orange-600);
+}
+
+/* ----------------------------------------------------------------------------
+   12. FOOTER
+---------------------------------------------------------------------------- */
+.site-footer {
+  background: var(--color-graphite-950);
+  color: var(--color-gray-400);
+  padding-block: var(--space-xl) var(--space-lg);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer-brand .brand { margin-bottom: var(--space-sm); }
+.footer-brand p { max-width: 34ch; font-size: 0.92rem; }
+.footer-col h3 {
+  color: var(--color-white);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+}
+.footer-col ul { display: grid; gap: 0.55rem; }
+.footer-col a { font-size: 0.92rem; transition: color var(--transition-base); }
+.footer-col a:hover { color: var(--color-orange-500); }
+.footer-bottom {
+  padding-top: var(--space-md);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+}
+.footer-social { display: flex; gap: 0.7rem; }
+.footer-social a {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 50%;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+.footer-social a:hover { background: var(--color-orange-600); border-color: var(--color-orange-600); }
+.footer-social svg { width: 16px; height: 16px; }
+
+/* ----------------------------------------------------------------------------
+   13. BOTÓN FLOTANTE DE WHATSAPP
+---------------------------------------------------------------------------- */
+.whatsapp-fab {
+  position: fixed;
+  right: var(--space-md);
+  bottom: var(--space-md);
+  z-index: 800;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #25d366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px -6px rgba(37, 211, 102, 0.65);
+  animation: fabPulse 2.6s ease-in-out infinite;
+  border: none;
+  cursor: pointer;
+}
+.whatsapp-fab svg { width: 30px; height: 30px; color: var(--color-white); }
+.whatsapp-fab:hover { animation-play-state: paused; transform: scale(1.06); }
+@keyframes fabPulse {
+  0%, 100% { box-shadow: 0 10px 24px -6px rgba(37, 211, 102, 0.65); }
+  50% { box-shadow: 0 10px 30px -4px rgba(37, 211, 102, 0.9); }
+}
+
+/* ----------------------------------------------------------------------------
+   14. ANIMACIONES DE SCROLL (con propósito: revelado + desplazamiento sutil,
+   controladas por assets/js/animations.js vía IntersectionObserver)
+---------------------------------------------------------------------------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+[data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+[data-reveal="left"] { transform: translateX(-32px); }
+[data-reveal="left"].is-visible { transform: translateX(0); }
+[data-reveal="right"] { transform: translateX(32px); }
+[data-reveal="right"].is-visible { transform: translateX(0); }
+[data-reveal="scale"] { transform: scale(0.94); }
+[data-reveal="scale"].is-visible { transform: scale(1); }
+
+/* Escalonado (stagger): cada hijo se retrasa un poco más que el anterior,
+   generado por animations.js mediante --reveal-delay inline. */
+[data-reveal] { transition-delay: var(--reveal-delay, 0s); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-reveal] { transition: none; opacity: 1; transform: none; }
+  .whatsapp-fab { animation: none; }
+}
+
+/* ----------------------------------------------------------------------------
+   14-B. MEJORAS INCREMENTALES SOBRE EL SITIO YA CONSTRUIDO
+   (numeración/tag/bullets/CTA propio en tarjetas de servicio, normas
+   técnicas, propuesta de valor discreta, FAQ en acordeón, metadatos de
+   tarjeta de proyecto, botón "Ver en Google Maps"). Se agrupan aquí en
+   vez de mezclarlas entre las secciones originales para que el diff de
+   este cambio incremental sea fácil de revisar.
+---------------------------------------------------------------------------- */
+
+/* --- Tarjetas de servicio "v2": numeración + tag técnico + bullets + CTA propio --- */
+.service-card__number {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-md);
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.14);
+  line-height: 1;
+}
+.service-card__tag {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-orange-500);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  /* Despeja el ícono (position:absolute, ~74px de alto contando su
+     offset) — antes de sumar tag/bullets/botón propio, el contenido en
+     flex solía quedar más abajo por el min-height + justify-content:
+     flex-end de .service-card; con más contenido esa holgura ya no
+     alcanza y el tag terminaba montado sobre el ícono. */
+  margin-top: 1.75rem;
+  margin-bottom: 0.35rem;
+}
+.service-card__list {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.75rem 0 1rem;
+}
+.service-card__list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+.service-card__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 6px;
+  height: 6px;
+  background: var(--color-orange-600);
+}
+.service-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+/* --- Normas técnicas aplicadas (página Servicios) --- */
+.standards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.standard-badge {
+  flex: 1 1 220px;
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+}
+.standard-badge svg { width: 26px; height: 26px; color: var(--color-blue-700); flex-shrink: 0; }
+.standard-badge h3 { font-size: 0.98rem; margin-bottom: 0.2rem; }
+.standard-badge p { font-size: 0.85rem; margin-bottom: 0; color: var(--color-gray-600); }
+
+/* --- Propuesta de Valor: sección deliberadamente discreta -------------------
+   Sin fotos, sin tarjetas con sombra/hover, sin fondo destacado: solo texto
+   e íconos pequeños, para que se lea como bloque secundario y no compita
+   visualmente con Servicios o Proyectos. */
+.value-section { padding-block: var(--space-lg); }
+.value-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg) var(--space-md);
+  margin-top: var(--space-md);
+}
+.value-item { display: flex; gap: 0.75rem; align-items: flex-start; }
+.value-item svg {
+  width: 22px; height: 22px;
+  color: var(--color-blue-700);
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+.value-item h3 {
+  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-bottom: 0.2rem;
+}
+.value-item p { font-size: 0.88rem; color: var(--color-gray-600); margin-bottom: 0; }
+
+/* --- FAQ en acordeón --- */
+.faq-list { display: grid; gap: 0.7rem; max-width: 820px; }
+.faq-item {
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-white);
+  border: none;
+  text-align: left;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  color: var(--color-graphite-950);
+  cursor: pointer;
+}
+.faq-question__icono {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  position: relative;
+}
+.faq-question__icono::before,
+.faq-question__icono::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  background: var(--color-orange-600);
+  transform: translate(-50%, -50%);
+  transition: transform var(--transition-base), opacity var(--transition-base);
+}
+.faq-question__icono::before { width: 14px; height: 2px; }
+.faq-question__icono::after { width: 2px; height: 14px; }
+.faq-item.is-open .faq-question__icono::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+.faq-item.is-open .faq-question { background: var(--color-offwhite); }
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-base);
+}
+.faq-answer__inner { padding: 0 var(--space-md) var(--space-md); }
+.faq-answer__inner p { font-size: 0.94rem; margin-bottom: 0; }
+.faq-item.is-open .faq-answer { max-height: 320px; }
+
+/* --- Metadatos de tarjeta de proyecto (fotos, ubicación, año, alcance) --- */
+.project-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  margin: 0.5rem 0 0.6rem;
+  font-size: 0.8rem;
+  color: var(--color-gray-600);
+}
+.project-card__meta span { display: inline-flex; align-items: center; gap: 0.3rem; }
+.project-card__meta svg { width: 14px; height: 14px; color: var(--color-orange-600); }
+.project-card__scope {
+  font-size: 0.85rem;
+  color: var(--color-graphite-800);
+  margin-bottom: 0.75rem;
+}
+.project-card__scope strong { color: var(--color-graphite-950); }
+.project-card__body { display: flex; flex-direction: column; }
+.project-card__body .btn { align-self: flex-start; }
+
+/* --- Botón deshabilitado visualmente (ej. "Ver Detalles" de un proyecto,
+   sin ficha de detalle todavía) --- */
+.btn--disabled {
+  opacity: 0.55;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+/* --- Botón "Ver en Google Maps" junto al iframe --- */
+.map-actions { display: flex; justify-content: flex-end; margin-bottom: var(--space-sm); }
+
+/* --- Checkbox de formulario (urgente / política de privacidad) --- */
+.form-checkbox {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  color: var(--color-graphite-700);
+}
+.form-checkbox input { margin-top: 0.2rem; flex-shrink: 0; width: 16px; height: 16px; }
+.form-checkbox a { color: var(--color-blue-700); text-decoration: underline; }
+
+/* --- Confirmación del servidor y estado de envío --- */
+.form-success {
+  display: none;
+  gap: 0.6rem;
+  align-items: flex-start;
+  background: #e7f6ec;
+  color: #1e6b3a;
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.92rem;
+  margin-top: var(--space-sm);
+}
+.form-success.is-visible { display: flex; }
+.form-success svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* ----------------------------------------------------------------------------
+   15. UTILIDADES
+---------------------------------------------------------------------------- */
+.text-center { text-align: center; }
+.mt-lg { margin-top: var(--space-lg); }
+.mb-0 { margin-bottom: 0 !important; }
+.badge-note {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-orange-700);
+  background: var(--color-orange-100);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+/* ----------------------------------------------------------------------------
+   16. RESPONSIVE
+---------------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .service-grid,
+  .project-grid,
+  .policy-grid { grid-template-columns: repeat(2, 1fr); }
+  .counters { grid-template-columns: repeat(2, 1fr); }
+  .sector-row { grid-template-columns: repeat(3, 1fr); }
+  .logo-grid { grid-template-columns: repeat(3, 1fr); }
+  .hero__content { grid-template-columns: 1fr; }
+  .hero__stats { grid-auto-flow: column; }
+  .value-list { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 820px) {
+  .nav-toggle { display: flex; }
+  .main-nav {
+    position: fixed;
+    inset: 0;
+    left: auto;
+    z-index: 895;
+    width: min(340px, 84vw);
+    background: var(--color-graphite-950);
+    padding: calc(var(--header-height) + var(--space-lg)) var(--space-lg) var(--space-lg);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+  }
+  .main-nav.is-open { transform: translateX(0); }
+  .main-nav__list { flex-direction: column; align-items: flex-start; gap: var(--space-md); }
+  .main-nav__backdrop {
+    position: fixed; inset: 0; background: rgba(10,12,14,0.6);
+    opacity: 0; pointer-events: none; transition: opacity var(--transition-base);
+    z-index: 890;
+  }
+  .main-nav__backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+  .service-grid,
+  .project-grid,
+  .policy-grid,
+  .footer-grid,
+  .grid--2,
+  .grid--2-lead { grid-template-columns: minmax(0, 1fr); }
+  .service-card:nth-child(2n) { transform: none; }
+  .form-row-2 { grid-template-columns: minmax(0, 1fr); }
+  .cta-banner { flex-direction: column; align-items: flex-start; }
+  .sector-row { grid-template-columns: repeat(2, 1fr); }
+  .logo-grid { grid-template-columns: repeat(2, 1fr); }
+  .counters { grid-template-columns: 1fr 1fr; }
+  .value-list { grid-template-columns: 1fr; }
+  .service-card__actions { flex-direction: column; align-items: stretch; }
+}
+
+@media (max-width: 540px) {
+  .hero__stats { grid-auto-flow: row; }
+  .counters { grid-template-columns: 1fr; }
+  .whatsapp-panel { right: var(--space-sm); left: var(--space-sm); width: auto; }
+}
+
+/* ----------------------------------------------------------------------------
+   17. WIDGET DE WHATSAPP (selector de asesor + servicio, ver
+   components/whatsapp-button.html y assets/js/whatsapp.js)
+---------------------------------------------------------------------------- */
+.whatsapp-widget { position: relative; }
+.whatsapp-panel {
+  position: fixed;
+  right: var(--space-md);
+  bottom: calc(60px + var(--space-md) + 0.75rem);
+  z-index: 801;
+  width: min(300px, calc(100vw - 2 * var(--space-md)));
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 40px -12px rgba(18, 22, 26, 0.4);
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+}
+.whatsapp-panel[hidden] { display: none; }
+.whatsapp-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.whatsapp-panel__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0;
+  color: var(--color-graphite-950);
+}
+.whatsapp-panel__close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-gray-600);
+}
+.whatsapp-panel__label {
+  font-size: 0.82rem;
+  color: var(--color-gray-600);
+  margin: 0 0 0.5rem;
+}
+.whatsapp-advisors { display: grid; gap: 0.5rem; list-style: none; margin: 0; padding: 0; }
+.whatsapp-advisor {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--color-offwhite);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--color-graphite-950);
+  transition: border-color var(--transition-base);
+}
+.whatsapp-advisor span { font-family: var(--font-body); font-weight: 400; color: var(--color-gray-600); font-size: 0.78rem; }
+.whatsapp-advisor:hover { border-color: #25d366; }
+.whatsapp-panel__back {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--color-blue-700);
+  cursor: pointer;
+}
+.whatsapp-service-select {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  color: var(--color-graphite-950);
+}
+.whatsapp-send {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: #25d366;
+  border-color: #25d366;
+}
+.whatsapp-send[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.whatsapp-panel__address {
+  margin: 0.75rem 0 0;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--color-gray-200);
+  font-size: 0.78rem;
+}
+.whatsapp-panel__address a { color: var(--color-blue-700); }
+
+.form-status[hidden] { display: none; }
+.form-status { padding: 0.85rem 1rem; border-radius: 8px; margin-top: 0.8rem; font-size: 0.92rem; }
+.form-status.is-error { background: #fff3e8; color: #7a3e0a; border: 1px solid #e9c4a0; }
+.form-status.is-success { background: #e7f6ec; color: #1e6b3a; border: 1px solid #b9dfc6; }

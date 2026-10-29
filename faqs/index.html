@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!--
+  ARCHIVO: faqs/index.html
+  QUÉ HACE: Página "Preguntas Frecuentes" en formato acordeón: la pregunta
+  siempre visible, clic para desplegar la respuesta. Es una sección propia
+  del sitio (no anidada dentro de Contacto), ubicada en el menú justo
+  antes de "Contacto".
+  CÓMO SE RELACIONA: la interacción del acordeón vive en
+  inicializarAcordeonFaq() dentro de assets/js/animations.js, que opera
+  sobre las clases .faq-item / .faq-question / .faq-answer definidas en
+  assets/css/styles.css.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#12161a">
+  <title>Preguntas Frecuentes — JHT Ingeniería</title>
+  <meta name="description" content="Respuestas a las preguntas más frecuentes sobre cotizaciones, despacho, tiempos de respuesta y garantía en JHT Ingeniería.">
+  <link rel="icon" type="image/png" href="../assets/img/logo-jht-oficial.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/jht-modern.css">
+</head>
+<body>
+
+  <div data-include="../components/header.html"></div>
+
+  <main>
+    <header class="page-header">
+      <div class="container">
+        <p class="kicker page-header__kicker">Ayuda</p>
+        <h1>Preguntas Frecuentes</h1>
+        <p>Resolvemos las dudas más comunes antes de iniciar un proyecto con nosotros.</p>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container">
+        <div class="faq-list" data-reveal-group>
+          <div class="faq-item" data-reveal>
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>¿En qué formatos se deben enviar los archivos para cotizar?</span>
+              <span class="faq-question__icono" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer__inner">
+                <p>Aceptamos archivos en formato DXF, DWG, STEP e IGS. Si no cuentas con planos digitales, también podemos trabajar a partir de una muestra física o de medidas y fotografías de referencia.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item" data-reveal>
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>¿Realizan despacho e instalación además de la fabricación?</span>
+              <span class="faq-question__icono" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer__inner">
+                <p>Sí. Además de diseñar y fabricar, coordinamos el transporte y podemos encargarnos del montaje/instalación en obra, según el alcance que se defina en la cotización.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item" data-reveal>
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>¿Cuál es el tiempo de respuesta para una cotización?</span>
+              <span class="faq-question__icono" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer__inner">
+                <p>El tiempo referencial es de 24 a 48 horas hábiles tras recibir la información completa del requerimiento; proyectos más complejos pueden tomar algunos días adicionales de evaluación técnica.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item" data-reveal>
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>¿Qué garantía ofrecen sobre el trabajo entregado?</span>
+              <span class="faq-question__icono" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer__inner">
+                <p>Nuestros trabajos cuentan con garantía sobre defectos de fabricación y soldadura; el plazo y alcance específicos se detallan en cada cotización según el tipo de proyecto.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-lg">¿Tienes otra pregunta? <a href="../contacto/">Escríbenos por el formulario de contacto →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <div data-include="../components/footer.html"></div>
+  <div data-include="../components/whatsapp-button.html"></div>
+
+  <script src="../assets/js/includes.js"></script>
+  <script src="../assets/js/menu.js"></script>
+  <script src="../assets/js/animations.js"></script>
+  <script src="../assets/js/whatsapp.js"></script>
+</body>
+</html>

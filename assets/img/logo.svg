@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Logotipo JHT Ingeniería (placeholder)">
+  <!-- Logotipo placeholder: figura geométrica que evoca una viga/armadura
+       metálica. Reemplazar por el logo real de la empresa entregado por
+       el cliente antes de producción. -->
+  <rect x="2" y="2" width="60" height="60" rx="8" fill="#12161a"/>
+  <path d="M10 46 L22 18 L32 40 L42 14 L54 46" fill="none" stroke="#ff7b1c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="22" cy="18" r="3.2" fill="#ffc300"/>
+  <circle cx="42" cy="14" r="3.2" fill="#ffc300"/>
+</svg>

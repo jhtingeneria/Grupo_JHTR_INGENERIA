@@ -1,0 +1,74 @@
+<!--
+  ARCHIVO: components/whatsapp-button.html
+  QUÉ HACE: Widget flotante de WhatsApp, visible en todas las páginas del
+  sitio (se incluye en cada página junto al header y footer). Al hacer
+  click se abre un panel para elegir un asesor y, luego, el servicio a
+  cotizar; el mensaje de WhatsApp se arma automáticamente con el servicio
+  elegido. La lógica vive en assets/js/whatsapp.js (se engancha al evento
+  "includes:loaded" que dispara assets/js/includes.js).
+  DÓNDE SE COLOCA: justo antes de cerrar </body> en cada página, después
+  del footer.
+  DATOS: Asesor 1 = 994968109, Asesor 2 = 913333927 (Perú, prefijo 51).
+-->
+<div class="whatsapp-widget">
+  <button
+    type="button"
+    class="whatsapp-fab"
+    id="whatsapp-toggle"
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-controls="whatsapp-panel"
+    aria-label="Escribir por WhatsApp a JHT Ingeniería"
+  >
+    <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+      <path d="M16.02 3C9.4 3 4 8.36 4 14.98c0 2.2.6 4.26 1.65 6.03L3 29l8.2-2.6a12.9 12.9 0 0 0 4.82.94h.01C22.65 27.34 28 21.98 28 15.35 28 8.72 22.65 3 16.02 3Zm0 22.9h-.01a10.4 10.4 0 0 1-5.3-1.46l-.38-.22-4.87 1.55 1.57-4.75-.25-.39a10.36 10.36 0 0 1-1.6-5.5c0-5.72 4.66-10.38 10.4-10.38 2.78 0 5.39 1.08 7.35 3.05a10.32 10.32 0 0 1 3.05 7.33c0 5.72-4.66 10.77-9.96 10.77Zm5.71-7.77c-.31-.16-1.85-.91-2.14-1.02-.29-.1-.5-.16-.71.16-.21.31-.81 1.02-1 1.23-.18.21-.37.23-.68.08-.31-.16-1.32-.49-2.51-1.56-.93-.83-1.56-1.86-1.74-2.17-.18-.31-.02-.48.14-.63.14-.14.31-.37.47-.55.16-.18.21-.31.31-.52.1-.21.05-.39-.03-.55-.08-.16-.71-1.72-.98-2.35-.26-.62-.52-.54-.71-.55-.18-.01-.39-.01-.6-.01-.21 0-.55.08-.84.39-.29.31-1.1 1.08-1.1 2.63 0 1.55 1.13 3.05 1.29 3.26.16.21 2.22 3.4 5.39 4.77.75.32 1.34.51 1.8.66.76.24 1.44.21 1.99.13.61-.09 1.85-.76 2.11-1.49.26-.73.26-1.36.18-1.49-.08-.13-.29-.21-.6-.37Z"/>
+    </svg>
+  </button>
+
+  <div class="whatsapp-panel" id="whatsapp-panel" role="dialog" aria-label="Escribir por WhatsApp" hidden>
+    <div class="whatsapp-panel__head">
+      <p class="whatsapp-panel__title">Escríbenos por WhatsApp</p>
+      <button type="button" class="whatsapp-panel__close" id="whatsapp-close" aria-label="Cerrar">&times;</button>
+    </div>
+
+    <div class="whatsapp-panel__step" data-whatsapp-step="asesor">
+      <p class="whatsapp-panel__label">1. Elige un asesor</p>
+      <ul class="whatsapp-advisors">
+        <li>
+          <button type="button" class="whatsapp-advisor" data-advisor-phone="51994968109" data-advisor-name="Asesor 1">
+            Asesor 1 <span>994 968 109</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="whatsapp-advisor" data-advisor-phone="51913333927" data-advisor-name="Asesor 2">
+            Asesor 2 <span>913 333 927</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="whatsapp-panel__step" data-whatsapp-step="servicio" hidden>
+      <button type="button" class="whatsapp-panel__back" id="whatsapp-back">← Cambiar de asesor</button>
+      <p class="whatsapp-panel__label">2. Elige el servicio a cotizar</p>
+      <select class="whatsapp-service-select" id="whatsapp-service-select">
+        <option value="" disabled selected>Selecciona un servicio</option>
+        <option>Estructuras metálicas</option>
+        <option>Corte láser a medida</option>
+        <option>Soldadura especializada</option>
+        <option>Servicios de maquinado y maestranza</option>
+        <option>Mantenimiento industrial</option>
+        <option>Bombas y válvulas</option>
+        <option>Otro servicio</option>
+      </select>
+      <a
+        href="#"
+        id="whatsapp-send"
+        class="btn btn--primary whatsapp-send"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-disabled="true"
+      >Continuar por WhatsApp →</a>
+    </div>
+
+  </div>
+</div>
