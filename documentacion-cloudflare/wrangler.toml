@@ -1,16 +1,20 @@
-
-name = "jht-reclamaciones-local"
+name = "jht-reclamaciones-api"
 main = "jht-reclamaciones-api.js"
 compatibility_date = "2026-10-28"
 
 [vars]
-ENVIRONMENT = "development"
-ENABLE_TEST_BYPASS = "false"
-ALLOWED_ORIGINS = "http://127.0.0.1:5500,http://localhost:5500"
-TURNSTILE_EXPECTED_HOSTNAME = "localhost"
+ALLOWED_ORIGINS = "https://jhtingeneria.github.io"
+TURNSTILE_EXPECTED_HOSTNAME = "jhtingeneria.github.io"
+# Correo: ver instrucciones. MAIL_FROM debe ser un remitente permitido por Resend.
+MAIL_FROM = "JHT Ingeniería <onboarding@resend.dev>"
+MAIL_EMPRESA = "jhtingeneria@gmail.com"
+MAIL_CLIENTE_ENABLED = "false"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "jht-reclamaciones-local"
-database_id = "00000000-0000-0000-0000-000000000001"
-migrations_dir = "migrations"
+database_name = "REEMPLAZAR_NOMBRE_DE_TU_BASE"
+database_id = "REEMPLAZAR_ID_DE_TU_BASE"
+
+# Secretos (NO van aquí):
+#   npx wrangler secret put TURNSTILE_SECRET_KEY
+#   npx wrangler secret put RESEND_API_KEY
