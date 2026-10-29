@@ -307,7 +307,7 @@
       }
 
       var c = resultado.constancia;
-      mostrar('Su reclamo fue registrado correctamente.');
+      mostrar('¡Su reclamo ha sido registrado correctamente! GRUPO JHT INGENIERÍA SAC revisará su solicitud y emitirá una respuesta dentro del plazo legal aplicable. Guarde su código de registro y descargue su constancia en PDF.');
       mostrarConstancia(c);
       formulario.reset();
     } catch (error) {
