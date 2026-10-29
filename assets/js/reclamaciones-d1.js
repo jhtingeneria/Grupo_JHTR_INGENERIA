@@ -103,7 +103,7 @@
       { t: 'GRUPO JHT INGENIERIA SAC', n: 16, b: true },
       { t: 'Libro de Reclamaciones - Constancia de recepcion', n: 12, b: true, s: 4 },
       { t: 'N° de reclamo: ' + (c.codigo || '-'), n: 14, b: true, s: 14 },
-      { t: 'Fecha y hora de registro (Lima): ' + (fecha || '-'), n: 11, s: 6 }
+      { t: 'Fecha y hora de registro: ' + (fecha || '-'), n: 11, s: 6 }
     ];
     [
       ['Tipo', c.tipo_reclamo], ['Nombres y apellidos', c.nombre], ['Documento', c.documento],
@@ -118,6 +118,27 @@
     return pdfConstruir(bloques);
   }
   // ==PDF-FIN==
+
+  // Muestra la fecha/hora en la zona horaria del dispositivo de quien envía el reclamo.
+  // El servidor entrega la fecha en UTC (sin indicador de zona), por eso se interpreta como UTC
+  // y se convierte a la hora local del usuario. Incluye el nombre de la zona (ej. GMT-5).
+  function formatearFechaLocal(valor) {
+    if (!valor) return '';
+    var texto = String(valor).trim();
+    var iso = texto.replace(' ', 'T');
+    if (!/(Z|[+-]\d{2}:?\d{2})$/i.test(iso)) iso += 'Z';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return texto;
+    try {
+      return d.toLocaleString('es-PE', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hourCycle: 'h23', timeZoneName: 'short'
+      });
+    } catch (_) {
+      return texto;
+    }
+  }
 
   function descargarConstancia(c, fecha) {
     var bytes = pdfConstancia(c, fecha);
@@ -136,7 +157,7 @@
   function mostrarConstancia(c) {
     var caja = document.getElementById('jht-constancia');
     if (!caja) return;
-    var fecha = c.fecha_registro_lima || c.fecha_registro || '';
+    var fecha = formatearFechaLocal(c.fecha_registro_lima || c.fecha_registro || '');
     caja.textContent = '';
 
     var titulo = document.createElement('h3');
@@ -146,7 +167,7 @@
     [
       ['N° de reclamo', c.codigo],
       ['Tipo', c.tipo_reclamo],
-      ['Fecha y hora (Lima)', fecha],
+      ['Fecha y hora de registro', fecha],
       ['Consumidor', c.nombre],
       ['Correo de contacto', c.email]
     ].forEach(function (par) {
