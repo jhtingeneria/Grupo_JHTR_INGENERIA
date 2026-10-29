@@ -12,8 +12,8 @@ MAIL_CLIENTE_ENABLED = "false"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "REEMPLAZAR_NOMBRE_DE_TU_BASE"
-database_id = "REEMPLAZAR_ID_DE_TU_BASE"
+database_name = "jht-libro-reclamaciones"
+database_id = "60bf7b69-2356-4fdf-b5d1-1131ef892b3e"
 
 # Secretos (NO van aquí):
 #   npx wrangler secret put TURNSTILE_SECRET_KEY
